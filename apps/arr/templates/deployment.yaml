@@ -45,11 +45,11 @@ spec:
           volumeDevices:
             {{- if $appConfig.configPVC }}
             - name: {{ include "arr.fullname" $ }}-{{ $appName }}-config
-              devicePath: /
+              devicePath: /config
             {{- end }}
             {{- if $appConfig.mediaDataPVC }}
             - name: {{ include "arr.fullname" $ }}-media-data
-              devicePath: /
+              devicePath: /data
             {{- end }}
       securityContext:
         runAsUser: 1000
