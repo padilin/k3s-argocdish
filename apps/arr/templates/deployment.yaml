@@ -42,8 +42,29 @@ spec:
               {{- end }}
             {{- end }}
           {{- end }}
+          volumeDevices:
+            {{- if $appConfig.configPVC }}
+            - name: {{ include "arr.fullname" $ }}-{{ $appName }}-config
+              devicePath: /
+            {{- end }}
+            {{- if $appConfig.mediaDataPVC }}
+            - name: {{ include "arr.fullname" $ }}-mediaData
+              devicePath: /
+            {{- end }}
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
+        runAsNonRoot: true
+      volumes:
+        {{- if $appConfig.configPVC }}
+        - name: {{ include "arr.fullname" $ }}-{{ $appName }}-config
+          persistentVolumeClaim:
+            claimName: {{ include "arr.fullname" $ }}-config-pvc
+        {{- end }}
+        {{- if $appConfig.mediaDataPVC }}
+        - name: {{ include "arr.fullname" $ }}-mediaData
+          persistentVolumeClaim:
+            claimName: {{ include "arr.fullname" $ }}-mediaData-pvc
+        {{- end }}
 {{- end }}
 {{- end }}
