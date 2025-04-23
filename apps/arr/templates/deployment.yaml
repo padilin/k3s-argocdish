@@ -33,7 +33,7 @@ spec:
           {{- if $appConfig.env }}
           env:
             {{- range $envVar := $appConfig.env }}
-            - name: {{ $env.name }}
+            - name: {{ $envVar.name }}
               {{- if $envVar.value }}
               value: {{ $envVar.value | quote }}
               {{- else if $envVar.valueFrom }}
