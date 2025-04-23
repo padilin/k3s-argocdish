@@ -1,0 +1,6 @@
+apiVersion: v2
+name: arr
+description: A Helm chart for arr application-ish based on Linuxserver.io
+type: application
+
+version: 0.1.0

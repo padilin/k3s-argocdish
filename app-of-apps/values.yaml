@@ -7,7 +7,7 @@ applications:
     source:
       repoURL: https://github.com/padilin/k3s-argocdish.git
       targetRevision: main
-      path: app/argocd
+      path: apps/argocd
     destination:
       server: https://kubernetes.default.svc
       namespace: argocd
@@ -17,3 +17,15 @@ applications:
         selfHeal: true
       syncOptions:
         - CreateNamespace=true
+  radarr:
+    enabled: true
+    name: radarr
+    namespace: argocd
+    project: arr
+    source:
+      repoURL: https://github.com/padilin/k3s-argocdish.git
+      targetRevision: main
+      path: apps/radarr
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: arr

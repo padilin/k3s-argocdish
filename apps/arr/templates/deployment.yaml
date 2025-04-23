@@ -1,0 +1,33 @@
+{{- range $appName, $appConfig := .Values.apps }} {{- /* Loop through each app defined in values */}}
+{{- if $appConfig.enabled }} {{- /* Only generate if app is enabled */}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "arr.fullname" $ }}-{{ $appName }} 
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "arr.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $appName }} # Add specific app label
+spec:
+  replicas: {{ $appConfig.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "arr.selectorLabels" $ | nindent 6 }}
+      app.kubernetes.io/component: {{ $appName }} # Ensure selector includes the specific app
+  template:
+    metadata:
+      labels:
+        {{- include "arr.selectorLabels" $ | nindent 8 }}
+        app.kubernetes.io/component: {{ $appName }} # Add specific app label to pods
+    spec:
+      containers:
+        - name: {{ $appName }} # Container name based on the app key
+          image: "{{ $appConfig.image.repository }}:{{ $appConfig.image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ $appConfig.image.pullPolicy }}
+          {{- if $appConfig.resources }}
+          resources:
+            {{- toYaml $appConfig.resources | nindent 12 }}
+          {{- end }}
+{{- end }}
+{{- end }}
