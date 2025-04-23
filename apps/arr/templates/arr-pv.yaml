@@ -10,11 +10,13 @@ spec:
     volumeHandle: {{ include "arr.fullname" $ }}-data-pv
     fsType: xfs
     volumeAttributes:
-      diskSelector: nvme
-      migratable: 'false'
-      nodeSelector: ''
-      numberOfReplicas: '2'
-      staleReplicaTimeout: '20'
+        dataEngine: v1
+        dataLocality: best-effort
+        diskSelector: nvme
+        fsType: xfs
+        migratable: 'true'
+        numberOfReplicas: '2'
+        staleReplicaTimeout: '480'
   accessModes:
     - ReadWriteMany
   claimRef:
