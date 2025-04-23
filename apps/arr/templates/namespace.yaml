@@ -1,0 +1,7 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+    name:  {{ include "arr.fullname" $ }}
+    labels:
+        {{- include "arr.labels" $ | nindent 4 }}
