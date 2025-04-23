@@ -17,15 +17,15 @@ applications:
         selfHeal: true
       syncOptions:
         - CreateNamespace=true
-  radarr:
+  arr:
     enabled: true
-    name: radarr
+    name: arr
     namespace: argocd
     project: arr
     source:
       repoURL: https://github.com/padilin/k3s-argocdish.git
       targetRevision: main
-      path: apps/radarr
+      path: apps/arr
     destination:
       server: https://kubernetes.default.svc
       namespace: arr
