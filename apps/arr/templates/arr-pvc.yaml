@@ -8,7 +8,8 @@ spec:
     storageClassName: longhorn-nvme
     volumeName: {{ $.Release.Namespace }}-data-pv
     resources:
-        storage: 5Gi
+        requests:
+            storage: 5Gi
     volumeMode: Filesystem
     accessModes:
         - ReadWriteMany
