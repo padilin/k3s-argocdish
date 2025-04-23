@@ -24,7 +24,7 @@ applications:
       #  parameters:
       #  - name: "ish"
       #    value: "42"
-  destination:
-    server: '{{ .Values.global.destinationServer }}'
-    namespace: argocd
-  syncPolicy: '{{ .Values.global.syncPolicy }}'
+    destination:
+      server: '{{ .Values.global.destinationServer }}'
+      namespace: argocd
+    syncPolicy: '{{ .Values.global.syncPolicy }}'
