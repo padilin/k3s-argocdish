@@ -1,3 +1,4 @@
+{{- range $appName, $appConfig := .Values.apps }}
 {{- range $volName, $volConfig := $appConfig.storage }}
 ---
 apiVersion: v1
@@ -28,3 +29,5 @@ spec:
   presistentVolumeReclaimPolicy: Retain
   storageClassName: longhorn-nvme
   volumeMode: Filesystem
+{{- end }}
+{{- end }}
