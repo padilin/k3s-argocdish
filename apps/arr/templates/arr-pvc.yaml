@@ -7,7 +7,7 @@ metadata:
 spec:
     storageClassName: longhorn-nvme
     volumeName: {{ $.Release.Namespace }}-data-pv
-    capacity:
+    resources:
         storage: 5Gi
     volumeMode: Filesystem
     accessModes:
