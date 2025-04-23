@@ -18,3 +18,12 @@ apps:
     env:
       - name: TZ
         value: America/Chicago
+    storage:
+      - name: config
+        shared: false
+        path: /config
+        size: 5Gi
+      - name: media-data
+        shared: true
+        path: /data
+        size: 5Gi
