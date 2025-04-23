@@ -19,11 +19,11 @@ apps:
       - name: TZ
         value: America/Chicago
     storage:
-      - name: config
+      config:
         shared: false
         path: /config
         size: 5Gi
-      - name: media-data
+      media-data:
         shared: true
         path: /data
         size: 5Gi
