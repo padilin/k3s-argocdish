@@ -8,9 +8,10 @@ spec:
     storageClassName: longhorn-nvme
     claimRef:
         name: {{ $.Release.Namespace }}-data-pvc
-        namespace: arr
+        namespace: {{ $.Release.Namespace }}
     capacity:
         storage: 5Gi
     volumeMode: Filesystem
     accessModes:
         - ReadWriteMany
+        - ReadOnlyMany
