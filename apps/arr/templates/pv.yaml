@@ -22,11 +22,11 @@ spec:
     - ReadWriteOnce
     {{- end }}
   claimRef:
-    kind: PresistentVolumeClaim
+    kind: PersistentVolumeClaim
     namespace: {{ $.Release.Namespace }}
     name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
     apiVersion: v1
-  presistentVolumeReclaimPolicy: Retain
+  persistentVolumeReclaimPolicy: Retain
   storageClassName: longhorn-nvme
   volumeMode: Filesystem
 {{- end }}
