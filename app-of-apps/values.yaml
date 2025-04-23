@@ -1,0 +1,30 @@
+global:
+  destinationServer: https://kubernetes.default.svc
+  destinationNamespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+applications:
+  argocd:
+    enabled: true
+    name: argocd
+    namespace: argocd
+    project: default
+    source:
+      repoURL: https://github.com/padilin/k3s-argocdish.git
+      targetRevision: main
+      path: app/argocd
+      # helm:  # example helm chart
+      #  valueFiles:
+      #   - values.yaml
+      #  parameters:
+      #  - name: "ish"
+      #    value: "42"
+  destination:
+    server: '{{ .Values.global.destinationServer }}'
+    namespace: argocd
+  syncPolicy: '{{ .Values.global.syncPolicy }}'

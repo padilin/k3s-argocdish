@@ -1,0 +1,5 @@
+apiVersion: v2
+name: app-of-apps-ish
+description: Helm chart to deploy App of Apps to an ish cluster.
+type: application
+version: 0.1.0

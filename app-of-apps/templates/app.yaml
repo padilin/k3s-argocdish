@@ -1,0 +1,68 @@
+{{- range $appName, $appConfig := .Values.applications }}
+{{- if $appConfig.enabled }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ $appConfig.name }}
+  namespace: {{ $appConfig.namespace | default "default" }} 
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    app.kubernetes.io/managed-by: helm-app-of-apps
+spec:
+  project: {{ $appConfig.project | default "default" }}
+
+  source:
+    repoURL: {{ $appConfig.source.repoURL | quote }}
+    
+    {{- if $appConfig.source.path }}
+    path: {{ $appConfig.source.path | quote }}
+    {{- end }}
+    
+    {{- if $appConfig.source.chart }}
+    chart: {{ $appConfig.source.chart | quote }}
+    {{- end }}
+
+    targetRevision: {{ $appConfig.source.targetRevision | quote }}
+
+    {{- if $appConfig.source.helm }}
+    helm:
+      {{- if $appConfig.source.helm.valueFiles }}
+      valueFiles:
+      {{- range $valueFile := $appConfig.source.helm.valueFiles }}
+        - {{ $valueFile | quote }}
+      {{- end }}
+      {{- end }}
+      
+      {{- if $appConfig.source.helm.values }}
+      values: |
+{{ $appConfig.source.helm.values | indent 8 }}
+      {{- end }}
+
+      {{- if $appConfig.source.helm.parameters }}
+      parameters:
+      {{- range $param := $appConfig.source.helm.parameters }}
+        - name: {{ $param.name | quote }}
+          value: {{ $param.value | quote }}
+      {{- end }}
+      {{- end }}
+    {{- end }}
+
+  destination:
+    server: {{ $appConfig.destination.server | quote }}
+    namespace: {{ $appConfig.destination.namespace | quote }}
+
+  syncPolicy:
+    {{- if $appConfig.syncPolicy }}
+      {{- toYaml $appConfig.syncPolicy | nindent 4 }}
+    {{- else }}
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    {{- end }}
+
+{{- end }}
+{{- end }}
