@@ -1,13 +1,3 @@
-global:
-  destinationServer: https://kubernetes.default.svc
-  destinationNamespace: default
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
-
 applications:
   argocd:
     enabled: true
@@ -25,6 +15,11 @@ applications:
       #  - name: "ish"
       #    value: "42"
     destination:
-      server: {{ .Values.global.destinationServer | quote }}
+      server: https://kubernetes.default.svc
       namespace: argocd
-    syncPolicy: {{ .Values.global.syncPolicy }}
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+        - CreateNamespace=true
