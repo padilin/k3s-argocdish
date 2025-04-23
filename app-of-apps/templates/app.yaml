@@ -54,9 +54,6 @@ spec:
     namespace: {{ $appConfig.destination.namespace | quote }}
 
   syncPolicy:
-    {{- if $appConfig.syncPolicy }}
-      {{- toYaml $appConfig.syncPolicy | indent 3 }}
-    {{- else }}
     automated:
       prune: true
       selfHeal: true
