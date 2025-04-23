@@ -59,7 +59,7 @@ spec:
         {{- if $appConfig.configPVC }}
         - name: {{ include "arr.fullname" $ }}-{{ $appName }}-config
           persistentVolumeClaim:
-            claimName: {{ include "arr.fullname" $ }}-config-pvc
+            claimName: {{ include "arr.fullname" $ }}-{{ $appName }}-config-pvc
         {{- end }}
         {{- if $appConfig.mediaDataPVC }}
         - name: {{ include "arr.fullname" $ }}-media-data
