@@ -55,7 +55,7 @@ spec:
 
   syncPolicy:
     {{- if $appConfig.syncPolicy }}
-      {{- toYaml $appConfig.syncPolicy | nindent 4 }}
+      {{- toYaml $appConfig.syncPolicy | indent 4 }}
     {{- else }}
     automated:
       prune: true
