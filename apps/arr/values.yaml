@@ -13,3 +13,6 @@ apps:
       repository: lscr.io/linuxserver/sonarr
       tag: 4.0.14.2939-ls279
       pullPolicy: IfNotPresent
+    env:
+      - name: TZ
+        value: America/Chicago

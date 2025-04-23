@@ -15,6 +15,7 @@ spec:
     matchLabels:
       {{- include "arr.selectorLabels" $ | nindent 6 }}
       app.kubernetes.io/component: {{ $appName }} # Ensure selector includes the specific app
+  revisionHistoryLimit: 3
   template:
     metadata:
       labels:
@@ -29,5 +30,20 @@ spec:
           resources:
             {{- toYaml $appConfig.resources | nindent 12 }}
           {{- end }}
+          {{- if $appConfig.env }}
+          env:
+            {{- range $envVar := $appConfig.env }}
+            - name: {{ $env.name }}
+              {{- if $envVar.value }}
+              value: {{ $envVar.value | quote }}
+              {{- else if $envVar.valueFrom }}
+              valueFrom:
+                {{- toYaml $envVar.valueFrom | nindent 16 }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
 {{- end }}
 {{- end }}
