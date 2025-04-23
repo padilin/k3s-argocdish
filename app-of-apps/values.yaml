@@ -8,12 +8,6 @@ applications:
       repoURL: https://github.com/padilin/k3s-argocdish.git
       targetRevision: main
       path: app/argocd
-      # helm:  # example helm chart
-      #  valueFiles:
-      #   - values.yaml
-      #  parameters:
-      #  - name: "ish"
-      #    value: "42"
     destination:
       server: https://kubernetes.default.svc
       namespace: argocd
