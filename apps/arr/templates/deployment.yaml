@@ -48,7 +48,7 @@ spec:
               devicePath: /
             {{- end }}
             {{- if $appConfig.mediaDataPVC }}
-            - name: {{ include "arr.fullname" $ }}-mediaData
+            - name: {{ include "arr.fullname" $ }}-media-data
               devicePath: /
             {{- end }}
       securityContext:
@@ -62,9 +62,9 @@ spec:
             claimName: {{ include "arr.fullname" $ }}-config-pvc
         {{- end }}
         {{- if $appConfig.mediaDataPVC }}
-        - name: {{ include "arr.fullname" $ }}-mediaData
+        - name: {{ include "arr.fullname" $ }}-media-data
           persistentVolumeClaim:
-            claimName: {{ include "arr.fullname" $ }}-mediaData-pvc
+            claimName: {{ include "arr.fullname" $ }}-media-data-pvc
         {{- end }}
 {{- end }}
 {{- end }}
