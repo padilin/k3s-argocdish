@@ -15,6 +15,7 @@ apps:
       pullPolicy: IfNotPresent
     resources:
       limits:
+        cpu:
         memory: 100Mi
       requests:
         cpu: 50m
