@@ -9,9 +9,3 @@ spec:
     claimRef:
         name: {{ $.Release.Namespace }}-data-pvc
         namespace: {{ $.Release.Namespace }}
-    capacity:
-        storage: 5Gi
-    volumeMode: Filesystem
-    accessModes:
-        - ReadWriteMany
-        - ReadOnlyMany
