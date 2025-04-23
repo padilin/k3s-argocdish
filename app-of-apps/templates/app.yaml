@@ -55,13 +55,13 @@ spec:
 
   syncPolicy:
     {{- if $appConfig.syncPolicy }}
-      {{- toYaml $appConfig.syncPolicy | indent 4 }}
+      {{- toYaml $appConfig.syncPolicy | indent 3 }}
     {{- else }}
     automated:
       prune: true
       selfHeal: true
     syncOptions:
-    - CreateNamespace=true
+      - CreateNamespace=true
     {{- end }}
 
 {{- end }}
