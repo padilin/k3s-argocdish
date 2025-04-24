@@ -42,14 +42,18 @@ spec:
               {{- end }}
             {{- end }}
           {{- end }}
-          volumeDevices:
+          volumeMounts:
             {{- range $volName, $volConfig := $appConfig.storage }}
             - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
-              devicePath: {{ $volConfig.path }}
+              mountPath: {{ $volConfig.path }}
+              {{- if @volConfig.subPath }}
+              subPath: {{ $volConfig.subPath }}
+              {{- end }}
             {{- end }}
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
+        fsGroup: 1000
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
