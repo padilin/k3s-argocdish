@@ -52,6 +52,15 @@ spec:
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: storage-type
+                  operator: in
+                  values:
+                    - nvme
       volumes:
         {{- range $volName, $volConfig := $appConfig.storage }}
         - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}

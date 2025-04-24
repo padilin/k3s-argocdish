@@ -12,4 +12,4 @@ parameters:
   staleReplicaTimeout: '480'
 reclaimPolicy: Retain
 allowVolumeExpansion: true
-volumeBindingMode: Immediate
+volumeBindingMode: WaitForFirstConsumer
