@@ -9,7 +9,7 @@ metadata:
     - kubernetes.io/pv-protection
     - external-attacher/driver-longhorn-io
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: "3"
 spec:
   capacity:
     storage: {{ $volConfig.size }}
