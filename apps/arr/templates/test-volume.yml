@@ -13,7 +13,7 @@ spec:
   diskSelector:
     - nvme
   encrypted: false
-  frontend: blockdev'
+  frontend: blockdev
   migratable: false
   nodeSelector:
     - nvme
