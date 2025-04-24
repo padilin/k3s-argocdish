@@ -56,7 +56,7 @@ spec:
             nodeSelectorTerms:
               - matchExpressions:
                 - key: storage-type
-                  operator: in
+                  operator: In
                   values:
                     - nvme
       volumes:
