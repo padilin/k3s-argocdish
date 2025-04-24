@@ -5,6 +5,11 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pv
+  finalizers:
+    - kubernetes.io/pv-protection
+    - external-attacher/driver-longhorn-io
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   capacity:
     storage: {{ $volConfig.size }}
@@ -12,9 +17,11 @@ spec:
     driver: driver.longhorn.io
     volumeHandle: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pv
     fsType: xfs
-    migratable: true
-    numberOfReplicas: 2
-    staleReplicaTimeout: 480
+    volumeAttributes:
+      diskSelector: nvme
+      fsType: xfs
+      numberOfReplicas: '2'
+      staleReplicaTimeout: '480'
   accessModes:
     {{- if $volConfig.shared }}
     - ReadWriteMany

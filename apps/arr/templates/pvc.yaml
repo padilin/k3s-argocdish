@@ -6,6 +6,10 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
   namespace: {{ $.Release.Namespace }}
+  finalizers:
+    - kubernetes.io/pvc-protection
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   accessModes:
     {{- if $volConfig.shared }}
@@ -16,7 +20,7 @@ spec:
   resources:
     requests:
       storage: {{ $volConfig.size }}
-  volumeName: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pv
+  volumeName: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-vol
   storageClassName: longhorn-nvme
   volumeMode: Filesystem
 {{- end }}

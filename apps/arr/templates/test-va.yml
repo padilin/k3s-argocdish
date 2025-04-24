@@ -1,9 +1,0 @@
-apiVersion: longhorn.io/v1beta2
-kind: VolumeAttachment
-metadata:
-  finalizers:
-    - longhorn.io
-  name: arr-test-va
-  namespace: storage
-spec:
-  volume: arr-test-volume

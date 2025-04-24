@@ -9,6 +9,8 @@ metadata:
   labels:
     {{- include "arr.labels" $ | nindent 4 }}
     app.kubernetes.io/component: {{ $appName }} # Add specific app label
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
 spec:
   replicas: {{ $appConfig.replicaCount }}
   selector:
