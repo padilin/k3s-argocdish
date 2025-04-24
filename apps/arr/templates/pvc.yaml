@@ -18,7 +18,7 @@ spec:
   resources:
     requests:
       storage: {{ $volConfig.size }}
-  storageClassName: longhorn-nvme
+  storageClassName: longhorn-arr
   volumeMode: Filesystem
 {{- end }}
 {{- end }}
