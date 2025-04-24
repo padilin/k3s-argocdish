@@ -46,7 +46,7 @@ spec:
             {{- range $volName, $volConfig := $appConfig.storage }}
             - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
               mountPath: {{ $volConfig.path }}
-              {{- if @volConfig.subPath }}
+              {{- if $volConfig.subPath }}
               subPath: {{ $volConfig.subPath }}
               {{- end }}
             {{- end }}
