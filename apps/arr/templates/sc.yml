@@ -3,7 +3,7 @@ kind: StorageClass
 metadata:
   name: longhorn-nvme
   annotations:
-    argocd.argoproj.io/sync-wave: "0"
+    argocd.argoproj.io/sync-wave: "-1"
 provisioner: driver.longhorn.io
 parameters:
   diskSelector: nvme
