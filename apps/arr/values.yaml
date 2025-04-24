@@ -8,8 +8,6 @@ apps:
       pullPolicy: IfNotPresent
   sonarr:
     enabled: true
-    configPVC: true
-    mediaDataPVC: true
     replicaCount: 1
     image:
       repository: lscr.io/linuxserver/sonarr

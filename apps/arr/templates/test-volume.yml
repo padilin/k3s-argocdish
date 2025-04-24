@@ -1,0 +1,21 @@
+apiVersion: longhorn.io/v1beta2
+kind: Volume
+metadata:
+  finalizers:
+    - longhorn.io
+  name: arr-test-volume
+  namespace: storage
+spec:
+  Standby: false
+  accessMode: rwo
+  dataEngine: v1
+  dataLocality: best-effort
+  diskSelector:
+    - nvme
+  encrypted: false
+  frontend: blockdev'
+  migratable: false
+  nodeSelector:
+    - nvme
+  numberOfReplicas: 2
+  staleReplicaTimeout: 480
