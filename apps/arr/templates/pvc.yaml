@@ -20,7 +20,6 @@ spec:
   resources:
     requests:
       storage: {{ $volConfig.size }}
-  volumeName: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-vol
   storageClassName: longhorn-nvme
   volumeMode: Filesystem
 {{- end }}
