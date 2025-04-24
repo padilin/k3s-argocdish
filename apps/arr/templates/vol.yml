@@ -9,7 +9,7 @@ metadata:
   name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-vol
   namespace: storage
   annotations:
-    argocd.argoproj.io/sync-wave: "3"  # Before volumeAttachment
+    argocd.argoproj.io/sync-wave: "1"  # Before volumeAttachment
 spec:
   Standby: false
   accessMode: rwo
