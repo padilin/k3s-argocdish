@@ -68,6 +68,7 @@ spec:
       volumes:
         {{- range $volName, $volConfig := $appConfig.storage }}
         {{- if not $volConfig.pvc }}
+        
         {{- else }}
         - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
           persistentVolumeClaim:
