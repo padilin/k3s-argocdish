@@ -6,6 +6,18 @@ apps:
       repository: lscr.io/linuxserver/radarr
       tag: 5.21.1.9799-ls270
       pullPolicy: IfNotPresent
+    env:
+      - name: TZ
+        value: America/Chicago
+    storage:
+      config:
+        shared: false
+        path: /config
+        size: 5Gi
+      media-data:
+        shared: true
+        path: /data
+        size: 5Gi
   sonarr:
     enabled: true
     replicaCount: 1
@@ -25,3 +37,62 @@ apps:
         shared: true
         path: /data
         size: 5Gi
+  qbittorrent:
+    enabled: true
+    replicaCount: 1
+    image:
+      repository: lscr.io/linuxserver/qbittorrent
+      tag: latest
+      pullPolicy: IfNotPresent
+    env:
+      - name: TZ
+        value: America/Chicago
+    storage:
+      config:
+        shared: false
+        path: /config
+        size: 5Gi
+      media-data:
+        shared: true
+        path: /data
+        size: 5Gi
+        subPath: /torrents
+  overseerr:
+    enabled: true
+    replicaCount: 1
+    image: 
+      repository: lscr.io/linuxserver/overseerr
+      tag: latest
+      pullPolicy: IfNotPresent
+    env:
+      - name: TZ
+        value: America/Chicago
+    storage:
+      config:
+        shared: false
+        path: /config
+        size: 5Gi
+  jellyfin:
+    enabled: true
+    replicaCount: 1
+    image: 
+      repository: lscr.io/linuxserver/jellyfin
+      tag: 10.10.7
+      pullPolicy: IfNotPresent
+    env:
+      - name: TZ
+        value: America/Chicago
+    storage:
+      config:
+        shared: false
+        path: /config
+        size: 5Gi
+      hwaccel:
+        hostPath: /dev/video19
+        path: /dev/video19
+        pvc: false
+      media-data:
+        shared: true
+        path: /media
+        size: 5Gi
+        subPath: /media

@@ -48,6 +48,8 @@ spec:
               mountPath: {{ $volConfig.path }}
               {{- if $volConfig.subPath }}
               subPath: {{ $volConfig.subPath }}
+              {{- end }}{{- if $volConfig.hostPath }}
+              hostPath: {{ $volConfig.hostPath }}
               {{- end }}
             {{- end }}
       securityContext:
@@ -65,9 +67,12 @@ spec:
                     - nvme
       volumes:
         {{- range $volName, $volConfig := $appConfig.storage }}
+        {{- if not $volConfig.pvc }}
+        {{- else }}
         - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
           persistentVolumeClaim:
             claimName: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
+        {{- end }}
         {{- end }}
 {{- end }}
 {{- end }}
