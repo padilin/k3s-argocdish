@@ -6,6 +6,43 @@ This project aims to deploy and manage a HA K3s cluster using Raspberry Pis (3x 
 
 ---
 
+## Diagrams
+### Physical Network
+```mermaid
+graph LR
+    A[The Internet] <--> B(Router)
+    B <-- Ethernet Cable / eno1 --> C(Rocky Server gallade)
+    B <-- Ethernet Cable / eno1 --> H(Rest of LAN)
+    C <-- Ethernet Cable / eno3 --> D(Dedicated Pi Switch)
+    D <-- Ethernet Cables --> F(3x Pi 5<br>Control Plane)
+    D <-- Ethernet Cables --> G(4x Pi 4<br>Worker Nodes)
+```
+
+### Networking
+graph LR
+    A[The Internet] --> B(Router)
+    B --> C(Rocky Server gallade<br>192.168.1.99/22 - eno1)
+    C -- Internal LAN --> B
+    C -- eno3 --> D(Dedicated Pi Switch)
+    C -- br-pi (OVS Bridge)<br>192.168.4.1/24 --> D
+    C -- Firewall/NAT --> A
+
+    subgraph Raspberry Pi Cluster
+        D -- 192.168.4.0/24 --> F(Pi Control Plane Nodes x3<br>192.168.4.11-.13)
+        D -- 192.168.4.0/24 --> G(Pi Worker Nodes x4<br>192.168.4.14-.17)
+        F --> H[K3s Cluster]
+        G --> H
+        J(Hosts High Level Applications and Services<br>) --> H
+    end
+
+    H -- K3s API (6443) --> C
+    H -- Cilium Network --> D
+    H -- Cilium LoadBalancer --> C
+    C -- Forwards to K3s LoadBalancer --> H
+    C -- Access via Router & Firewalld --> H
+
+
+
 ## I. Network Infrastructure (Rocky Server - `gallade`)
 
 1.  **Interfaces:**
