@@ -67,9 +67,7 @@ spec:
                     - nvme
       volumes:
         {{- range $volName, $volConfig := $appConfig.storage }}
-        {{- if not $volConfig.pvc }}
-        
-        {{- else }}
+        {{- if $volConfig.pvc }}
         - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
           persistentVolumeClaim:
             claimName: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc

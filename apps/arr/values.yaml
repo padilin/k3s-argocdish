@@ -14,10 +14,12 @@ apps:
         shared: false
         path: /config
         size: 5Gi
+        pvc: true
       media-data:
         shared: true
         path: /data
         size: 5Gi
+        pvc: true
   sonarr:
     enabled: true
     replicaCount: 1
@@ -33,10 +35,12 @@ apps:
         shared: false
         path: /config
         size: 5Gi
+        pvc: true
       media-data:
         shared: true
         path: /data
         size: 5Gi
+        pvc: true
   qbittorrent:
     enabled: true
     replicaCount: 1
@@ -52,11 +56,13 @@ apps:
         shared: false
         path: /config
         size: 5Gi
+        pvc: true
       media-data:
         shared: true
         path: /data
         size: 5Gi
         subPath: /torrents
+        pvc: true
   overseerr:
     enabled: true
     replicaCount: 1
@@ -72,6 +78,7 @@ apps:
         shared: false
         path: /config
         size: 5Gi
+        pvc: true
   jellyfin:
     enabled: true
     replicaCount: 1
@@ -87,6 +94,7 @@ apps:
         shared: false
         path: /config
         size: 5Gi
+        pvc: true
       hwaccel:
         hostPath: /dev/video19
         path: /dev/video19
@@ -96,3 +104,4 @@ apps:
         path: /media
         size: 5Gi
         subPath: /media
+        pvc: true
