@@ -1,5 +1,6 @@
 {{- range $appName, $appConfig := .Values.apps }}
 {{- range $volName, $volConfig := $appConfig.storage }}
+{{- if $volConfig.pvc }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -20,5 +21,6 @@ spec:
       storage: {{ $volConfig.size }}
   storageClassName: longhorn-arr
   volumeMode: Filesystem
+{{- end }}
 {{- end }}
 {{- end }}
