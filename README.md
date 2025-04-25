@@ -19,6 +19,7 @@ graph LR
 ```
 
 ### Networking
+```mermaid
 graph LR
     A[The Internet] --> B(Router)
     B --> C(Rocky Server gallade<br>192.168.1.99/22 - eno1)
@@ -40,7 +41,7 @@ graph LR
     H -- Cilium LoadBalancer --> C
     C -- Forwards to K3s LoadBalancer --> H
     C -- Access via Router & Firewalld --> H
-
+```
 
 
 ## I. Network Infrastructure (Rocky Server - `gallade`)
