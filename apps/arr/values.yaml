@@ -61,7 +61,7 @@ apps:
         shared: true
         path: /data
         size: 5Gi
-        subPath: /torrents
+        subPath: torrents
         pvc: true
   overseerr:
     enabled: true
@@ -103,5 +103,5 @@ apps:
         shared: true
         path: /media
         size: 5Gi
-        subPath: /media
+        subPath: media
         pvc: true
