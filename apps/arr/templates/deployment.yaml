@@ -33,7 +33,7 @@ spec:
             - name: {{ include "arr.fullname" $ }}-{{ $appName }}-gluetun
               mountPath: /gluetun
           env:
-            {{- range $envVar := .Values.gluetun.env }}
+            {{- range $envVar := $.Values.gluetun.env }}
             - name: {{ $envVar.name }}
               {{- if $envVar.value }}
               value: {{ $envVar.value | quote }}
