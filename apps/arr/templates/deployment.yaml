@@ -23,6 +23,26 @@ spec:
         app.kubernetes.io/component: {{ $appName }} # Add specific app label to pods
     spec:
       containers:
+        {{- if $appConfig.gluetun }}
+        - name: {{ include "arr.fullname" $ }}-{{ $appName }}-gluetun
+          image: qmcgaw/gluetun
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+          volumeMounts:
+            - name: {{ include "arr.fullname" $ }}-{{ $appName }}-gluetun
+              mountPath: /gluetun
+          env:
+            {{- range $envVar := .Values.gluetun.env }}
+            - name: {{ $envVar.name }}
+              {{- if $envVar.value }}
+              value: {{ $envVar.value | quote }}
+              {{- else if $envVar.valueFrom }}
+              valueFrom:
+                {{- toYaml $envVar.valueFrom | nindent 16 }}
+              {{- end }}
+            {{- end }}
+        {{- end }}
         - name: {{ $appName }} # Container name based on the app key
           image: "{{ $appConfig.image.repository }}:{{ $appConfig.image.tag | default $.Chart.AppVersion }}"
           imagePullPolicy: {{ $appConfig.image.pullPolicy }}
@@ -73,6 +93,11 @@ spec:
         - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
           hostPath:
             path: {{ $volConfig.hostPath }}
+        {{- end }}
+        {{- if $appConfig.gluetun }}
+        - name: {{ include "arr.fullname" $ }}-{{ $appName }}-gluetun
+          emptyDir:
+            sizeLimit: 1Gi
         {{- end }}
         {{- end }}
 {{- end }}
