@@ -72,6 +72,7 @@ apps:
     enabled: true
     replicaCount: 1
     gluetun: true
+    stateful: true
     image:
       repository: lscr.io/linuxserver/qbittorrent
       tag: latest

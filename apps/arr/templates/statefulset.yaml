@@ -1,9 +1,9 @@
 {{- range $appName, $appConfig := .Values.apps }} {{- /* Loop through each app defined in values */}}
 {{- if $appConfig.enabled }} {{- /* Only generate if app is enabled */}}
-{{- if empty $appConfig.stateful }}
+{{- if $appConfig.stateful }}
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "arr.fullname" $ }}-{{ $appName }} 
   namespace: {{ $.Release.Namespace }}
@@ -11,12 +11,12 @@ metadata:
     {{- include "arr.labels" $ | nindent 4 }}
     app.kubernetes.io/component: {{ $appName }} # Add specific app label
 spec:
+  serviceName: {{ include "arr.fullname" $ }}-{{ $appName }}-svc
   replicas: {{ $appConfig.replicaCount }}
   selector:
     matchLabels:
       {{- include "arr.selectorLabels" $ | nindent 6 }}
       app.kubernetes.io/component: {{ $appName }} # Ensure selector includes the specific app
-  revisionHistoryLimit: 3
   template:
     metadata:
       labels:
@@ -85,22 +85,22 @@ spec:
                   values:
                     - nvme
       volumes:
-        {{- range $volName, $volConfig := $appConfig.storage }}
-        {{- if $volConfig.pvc }}
-        - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
-          persistentVolumeClaim:
-            claimName: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
-        {{- else }}
-        - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
-          hostPath:
-            path: {{ $volConfig.hostPath }}
-        {{- end }}
         {{- if $appConfig.gluetun }}
         - name: {{ include "arr.fullname" $ }}-{{ $appName }}-gluetun
           emptyDir:
-            sizeLimit: 1Gi
         {{- end }}
-        {{- end }}
+  volumeClaimTemplates:
+    {{- range $volName, $volConfig := $appConfig.storage }}
+    {{- if $volConfig.pvc }}
+    - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
+      persistentVolumeClaim:
+        claimName: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
+    {{- else }}
+    - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
+      hostPath:
+        path: {{ $volConfig.hostPath }}
+    {{- end }}
+    {{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

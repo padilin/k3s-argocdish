@@ -14,7 +14,7 @@ spec:
     {{- if $volConfig.shared }}
     - ReadWriteMany
     {{- else }}
-    - ReadWriteOnce
+    - ReadWriteOncePod
     {{- end }}
   resources:
     requests:
