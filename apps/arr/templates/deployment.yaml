@@ -23,7 +23,7 @@ spec:
         app.kubernetes.io/component: {{ $appName }} # Add specific app label to pods
     spec:
       containers:
-        {{- if $appConfig.gluetun }}
+        {{- if .Values.gluetun }}
         - name: {{ include "arr.fullname" $ }}-{{ $appName }}-gluetun
           image: qmcgaw/gluetun
           securityContext:
@@ -94,7 +94,7 @@ spec:
           hostPath:
             path: {{ $volConfig.hostPath }}
         {{- end }}
-        {{- if $appConfig.gluetun }}
+        {{- if .Values.gluetun }}
         - name: {{ include "arr.fullname" $ }}-{{ $appName }}-gluetun
           emptyDir:
             sizeLimit: 1Gi
