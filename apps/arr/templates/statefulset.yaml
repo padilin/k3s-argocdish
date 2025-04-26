@@ -89,10 +89,12 @@ spec:
         - name: {{ include "arr.fullname" $ }}-{{ $appName }}-gluetun
           emptyDir:
         {{- end }}{{- else }}
+        {{- range $volName, $volConfig := $appConfig.storage }}
         {{- if empty $volConfig.pvc }}
         - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
           hostPath:
             path: {{ $volConfig.hostPath }}
+        {{- end }}
         {{- end }}
   volumeClaimTemplates:
     {{- range $volName, $volConfig := $appConfig.storage }}
