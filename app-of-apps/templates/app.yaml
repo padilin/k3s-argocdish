@@ -46,9 +46,7 @@ spec:
         - name: {{ $param.name | quote }}
           value: {{ $param.value | quote }}
       {{- end }}
-      {{- end }}
     {{- else }}
-      {{- else }}
       values:
         apps:
 {{ toYaml $appConfig | indent 10 }}
