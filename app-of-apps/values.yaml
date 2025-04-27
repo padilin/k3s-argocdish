@@ -1,6 +1,6 @@
 applications:
   argocd:
-    enabled: true
+    enabled: false
     name: argocd
     namespace: argocd
     project: default
