@@ -29,12 +29,24 @@ applications:
     destination:
       server: https://kubernetes.default.svc
       namespace: arr
-  shared:
-    enable: true
-    name: shared
+  # shared:
+  #   enable: true
+  #   name: shared
+  #   namespace: argocd
+  #   project: arr
+  #   sharedStorageRoot: true
+  #   source:
+  #     repoURL: https://github.com/padilin/k3s-argocdish.git
+  #     targetRevision: main
+  #     path: apps/shared
+  #   destination:
+  #     server: https://kubernetes.default.svc
+  #     namespace: arr
+  sonarrtest:
+    enabled: true
+    name: sonarrtest
     namespace: argocd
     project: arr
-    sharedStorageRoot: true
     source:
       repoURL: https://github.com/padilin/k3s-argocdish.git
       targetRevision: main
@@ -42,6 +54,14 @@ applications:
     destination:
       server: https://kubernetes.default.svc
       namespace: arr
+    replicaCount: 1
+    image:
+      repository: lscr.io/linuxserver/sonarr
+      tag: 4.0.14.2939-ls279
+      pullPolicy: IfNotPresent
+    env:
+      - name: TZ
+        value: America/Chicago
   sonarr:
     enabled: true
     name: sonarr
