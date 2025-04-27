@@ -25,6 +25,7 @@ spec:
       port: {{ $portConfig.port }}
       targetPort: {{ $portConfig.port }}
       protocol: {{ $portConfig.protocol }}
+    {{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
