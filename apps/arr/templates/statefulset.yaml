@@ -90,7 +90,7 @@ spec:
         {{- if $appConfig.gluetun }}
         - name: {{ include "arr.fullname" $ }}-{{ $appName }}-gluetun
           emptyDir:
-        {{- end }}{{- else }}
+        {{- end }}
         {{- range $volName, $volConfig := $appConfig.storage }}
         {{- if empty $volConfig.pvc }}
         - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
