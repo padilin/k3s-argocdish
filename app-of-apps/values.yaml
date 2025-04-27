@@ -29,6 +29,19 @@ applications:
     destination:
       server: https://kubernetes.default.svc
       namespace: arr
+  shared:
+    enable: true
+    name: shared-arr
+    namespace: argocd
+    project: arr
+    sharedStorageRoot: true
+    source:
+      repoURL: https://github.com/padilin/k3s-argocdish.git
+      targetRevision: main
+      path: apps/shared
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: arr
   sonarr:
     enabled: true
     name: sonarr

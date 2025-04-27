@@ -1,0 +1,25 @@
+{{- range $volName, $volConfig := .Values.allSharedPVC }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "arr.fullname" $ }}-{{ $volName }}-pvc
+  namespace: {{ $.Release.Namespace }}
+  finalizers:
+    - kubernetes.io/pvc-protection
+spec:
+  accessModes:
+    {{- if $volConfig.shared }}
+    - ReadWriteMany
+    {{- else }}
+    - ReadWriteOncePod
+    {{- end }}
+  resources:
+    requests:
+      storage: {{ $volConfig.size }}
+  storageClassName: longhorn-arr
+  volumeMode: Filesystem
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
