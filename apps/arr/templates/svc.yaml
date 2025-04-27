@@ -1,6 +1,6 @@
 {{- range $appName, $appConfig := .Values.apps }}
 {{- if $appConfig.enabled }}
-{{- if not empty $appConfig.ports }}
+{{- if $appConfig.ports }}
 ---
 apiVersion: v1
 kind: Service
