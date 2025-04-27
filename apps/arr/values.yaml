@@ -93,6 +93,16 @@ apps:
         size: 5Gi
         subPath: ./torrents
         pvc: true
+    ports:
+      - name: http-webui
+        port: 8080
+        protocol: TCP
+      - name: bittorrent-tcp
+        port: 6881
+        protocol: TCP
+      - name: bittorrent-tcp
+        port: 6881
+        protocol: UDP
   overseerr:
     enabled: true
     replicaCount: 1

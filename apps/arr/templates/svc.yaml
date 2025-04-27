@@ -1,0 +1,30 @@
+{{- range $appName, $appConfig := .Values.apps }}
+{{- if $appConfig.enabled }}
+{{- if not empty $appConfig.ports }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "arr.fullname" $ }}-{{ $appName }}-svc
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: {{ $appName }}
+    app.kubernetes.io/instance: {{ $.Release.Namespace }}
+    app.kubernetes.io/name: {{ $.Release.Namespace }}
+spec:
+  selector:
+    app.kubernetes.io/component: {{ $appName }}
+    app.kubernetes.io/instance: {{ $.Release.Namespace }}
+    app.kubernetes.io/name: {{ $.Release.Namespace }}
+  {{- if $appConfig.stateful }}
+  clusterIP: None # This makes it a Headless Service
+  {{- end }}
+  ports:
+    {{- range $portConfig := $appConfig.ports }}
+    - name: {{ $portConfig.name }}
+      port: {{ $portConfig.port }}
+      targetPort: {{ $portConfig.port }}
+      protocol: {{ $portConfig.protocol }}
+{{- end }}
+{{- end }}
+{{- end }}
