@@ -49,9 +49,9 @@ spec:
       {{- end }}
     {{- else }}
       values:
-        apps:
+        apps: |
 {{ $appConfig | toYaml | indent 10 }}
-        gluetun:
+        gluetun: |
 {{ $.Values.gluetun | toYaml | indent 10 }}
     {{- end }}
 
