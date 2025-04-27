@@ -104,11 +104,12 @@ spec:
     - metadata:
         name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
       spec:
-        {{- if $volConfig.shared }}
-        - ReadWriteMany
-        {{- else }}
-        - ReadWriteOncePod
-        {{- end }}
+        accessModes:
+          {{- if $volConfig.shared }}
+          - ReadWriteMany
+          {{- else }}
+          - ReadWriteOncePod
+          {{- end }}
         storageClassName: longhorn-arr
         resources:
           requests:
