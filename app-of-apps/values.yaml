@@ -33,7 +33,7 @@ applications:
     enabled: true
     name: sonarr
     namespace: argocd
-    project: sonarr
+    project: arr
     source:
       repoURL: https://github.com/padilin/k3s-argocdish.git
       targetRevision: main

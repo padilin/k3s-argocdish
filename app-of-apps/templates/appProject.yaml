@@ -1,0 +1,12 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: arr
+  namespace: argocd
+spec:
+  description: Project for *arr application
+  destinations:
+    - namespace: '*'
+      server: '*'
+  sourceRepos:
+  - 'https://github.com/padilin/k3s-argocdish.git'
