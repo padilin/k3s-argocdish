@@ -31,7 +31,7 @@ applications:
       namespace: arr
   shared:
     enable: true
-    name: shared-arr
+    name: shared
     namespace: argocd
     project: arr
     sharedStorageRoot: true
