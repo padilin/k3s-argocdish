@@ -66,6 +66,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- end }}
+        {{- end }}
 {{$.Values.applications | toYaml | indent 10}}
     {{- end }}
 
