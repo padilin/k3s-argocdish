@@ -63,7 +63,7 @@ spec:
           {{ $otherStoreName }}:
             pvc: true
             shared: true
-            size: {{ $otherStoreName.size }}
+            size: {{ $otherStoreConfig.size }}
           {{- end }}
           {{- end }}
           {{- end }}
