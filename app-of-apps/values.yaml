@@ -54,14 +54,6 @@ applications:
     destination:
       server: https://kubernetes.default.svc
       namespace: arr
-    replicaCount: 1
-    image:
-      repository: lscr.io/linuxserver/sonarr
-      tag: 4.0.14.2939-ls279
-      pullPolicy: IfNotPresent
-    env:
-      - name: TZ
-        value: America/Chicago
   sonarr:
     enabled: true
     name: sonarr
