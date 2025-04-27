@@ -73,6 +73,7 @@ apps:
     replicaCount: 1
     gluetun: true
     stateful: true
+    storageAffinity: true
     image:
       repository: lscr.io/linuxserver/qbittorrent
       tag: latest
@@ -111,6 +112,7 @@ apps:
   jellyfin:
     enabled: true
     replicaCount: 1
+    storageAffinity: true
     image: 
       repository: lscr.io/linuxserver/jellyfin
       tag: 10.10.7

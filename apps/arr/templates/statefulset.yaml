@@ -75,6 +75,7 @@ spec:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
+      {{- if $appConfig.storageAffinity }}
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -84,6 +85,7 @@ spec:
                   operator: In
                   values:
                     - nvme
+      {{- end }}
       volumes:
         {{- if $appConfig.gluetun }}
         - name: {{ include "arr.fullname" $ }}-{{ $appName }}-gluetun
