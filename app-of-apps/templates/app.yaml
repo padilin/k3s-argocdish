@@ -57,12 +57,14 @@ spec:
         {{- if $appConfig.sharedStorageRoot }}
         allSharedPVC:
           {{- range $otherName, $otherApps := $.Values.applications }}
+          {{- if $otherApps.storage }}
           {{- range $otherStoreName, $otherStoreConfig := $otherApps.storage }}
           {{- if $otherStoreConfig.shared }}
           {{ $otherStoreName }}:
             pvc: true
             shared: true
             size: {{ $otherStoreName.size }}
+          {{- end }}
           {{- end }}
           {{- end }}
           {{- end }}
