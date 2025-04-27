@@ -26,8 +26,8 @@ spec:
 
     targetRevision: {{ $appConfig.source.targetRevision | quote }}
 
-    {{- if $appConfig.source.helm }}
     helm:
+    {{- if $appConfig.source.helm }}
       {{- if $appConfig.source.helm.valueFiles }}
       valueFiles:
       {{- range $valueFile := $appConfig.source.helm.valueFiles }}
@@ -38,12 +38,6 @@ spec:
       {{- if $appConfig.source.helm.values }}
       values: |
 {{ $appConfig.source.helm.values | indent 8 }}
-      {{- else }}
-      values:
-        apps:
-{{ toYaml $appConfig | indent 10 }}
-        gluetun:
-{{ toYaml $.Values.gluetun | indent 10 }}
       {{- end }}
 
       {{- if $appConfig.source.helm.parameters }}
@@ -53,6 +47,13 @@ spec:
           value: {{ $param.value | quote }}
       {{- end }}
       {{- end }}
+    {{- else }}
+      {{- else }}
+      values:
+        apps:
+{{ toYaml $appConfig | indent 10 }}
+        gluetun:
+{{ toYaml $.Values.gluetun | indent 10 }}
     {{- end }}
 
   destination:
