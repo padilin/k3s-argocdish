@@ -56,7 +56,7 @@ spec:
 {{ $.Values.gluetun | toYaml | indent 10 }}
         {{- if $appConfig.sharedStorageRoot }}
         allSharedPVC:
-          {{- range $otherApps := $.Values.applications }}
+          {{- range $otherName, $otherApps := $.Values.applications }}
           {{- range $otherStoreName, $otherStoreConfig := $otherApps.storage }}
           {{- if $otherStoreConfig.shared }}
           {{ $otherStoreName }}:
