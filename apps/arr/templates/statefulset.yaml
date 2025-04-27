@@ -65,7 +65,7 @@ spec:
           {{- end }}
           volumeMounts:
             {{- range $volName, $volConfig := $appConfig.storage }}
-            - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
+            - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
               mountPath: {{ $volConfig.path }}
               {{- if $volConfig.subPath }}
               subPath: {{ $volConfig.subPath }}
@@ -93,7 +93,7 @@ spec:
         {{- end }}
         {{- range $volName, $volConfig := $appConfig.storage }}
         {{- if empty $volConfig.pvc }}
-        - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
+        - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
           hostPath:
             path: {{ $volConfig.hostPath }}
         {{- end }}
