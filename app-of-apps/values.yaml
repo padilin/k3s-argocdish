@@ -42,9 +42,9 @@ applications:
   #   destination:
   #     server: https://kubernetes.default.svc
   #     namespace: arr
-  sonarrtest:
+  sharedarr:
     enabled: true
-    name: sonarrtest
+    name: sharedarr
     namespace: argocd
     project: arr
     source:
