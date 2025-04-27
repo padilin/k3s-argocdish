@@ -47,6 +47,7 @@ applications:
     name: sharedarr
     namespace: argocd
     project: arr
+    sharedStorageRoot: true
     source:
       repoURL: https://github.com/padilin/k3s-argocdish.git
       targetRevision: main
