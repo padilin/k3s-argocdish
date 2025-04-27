@@ -50,7 +50,7 @@ spec:
     {{- else }}
       values: |
         apps:
-{{ $appName | toYaml | indent 10 }}
+{{ $appName | toYaml | indent 10 }}:
 {{ $appConfig | toYaml | indent 12 }}
         gluetun:
 {{ $.Values.gluetun | toYaml | indent 10 }}
