@@ -41,3 +41,49 @@ applications:
     destination:
       server: https://kubernetes.default.svc
       namespace: arr
+    replicaCount: 1
+    image:
+      repository: lscr.io/linuxserver/sonarr
+      tag: 4.0.14.2939-ls279
+      pullPolicy: IfNotPresent
+    env:
+      - name: TZ
+        value: America/Chicago
+    storage:
+      config:
+        shared: false
+        path: /config
+        size: 5Gi
+        pvc: true
+      media-data:
+        shared: true
+        path: /data
+        size: 5Gi
+        pvc: true
+gluetun:
+  env:
+    - name: TZ
+      value: America/Chicago
+    - name: UPDATE_PERIOD
+      value: 24h
+    - name: VPN_TYPE
+      value: wireguard
+    - name: PORT_FORWARD_ONLY
+      value: on
+    - name: VPN_PORT_FORWARDING_UP_COMMAND
+      value: /bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{PORTS}}}" http://127.0.0.1:8080/api/v2/app/setPreferences 2>&1'
+    - name: VPN_SERVICE_PROVIDER
+      valueFrom:
+        secretKeyRef:
+          name: arr-gluetun-secret
+          key: vpn_service_provider
+    - name: WIREGUARD_PRIVATE_KEY
+      valueFrom:
+        secretKeyRef:
+          name: arr-gluetun-secret
+          key: wireguard_private_key
+    - name: SERVER_COUNTRIES
+      valueFrom:
+        secretKeyRef:
+          name: arr-gluetun-secret
+          key: server_countries

@@ -1,0 +1,10 @@
+apiVersion: v2
+name: shared
+description: A Helm chart for *arr shared application-ish
+type: application
+dependencies:
+  - name: library-templates
+    version: 0.1.0
+    repository: file://../library-templates
+
+version: 0.1.0

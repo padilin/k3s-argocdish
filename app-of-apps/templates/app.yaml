@@ -38,6 +38,12 @@ spec:
       {{- if $appConfig.source.helm.values }}
       values: |
 {{ $appConfig.source.helm.values | indent 8 }}
+      {{- else }}
+      values:
+        apps:
+{{ toYaml $appConfig | indent 10 }}
+        gluetun:
+{{ toYaml $.Values.gluetun | indent 10 }}
       {{- end }}
 
       {{- if $appConfig.source.helm.parameters }}
