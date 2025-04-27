@@ -20,6 +20,3 @@ spec:
   storageClassName: longhorn-arr
   volumeMode: Filesystem
 {{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
