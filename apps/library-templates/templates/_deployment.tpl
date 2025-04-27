@@ -1,0 +1,107 @@
+{{- define "library-templates._deployment.tpl" -}}
+{{- range $appName, $appConfig := .Values.apps }} {{- /* Loop through each app defined in values */}}
+{{- if $appConfig.enabled }} {{- /* Only generate if app is enabled */}}
+{{- if empty $appConfig.stateful }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "arr.fullname" $ }}-{{ $appName }} 
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "arr.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $appName }} # Add specific app label
+spec:
+  replicas: {{ $appConfig.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "arr.selectorLabels" $ | nindent 6 }}
+      app.kubernetes.io/component: {{ $appName }} # Ensure selector includes the specific app
+  revisionHistoryLimit: 3
+  template:
+    metadata:
+      labels:
+        {{- include "arr.selectorLabels" $ | nindent 8 }}
+        app.kubernetes.io/component: {{ $appName }} # Add specific app label to pods
+    spec:
+      containers:
+        {{- if $appConfig.gluetun }}
+        - name: {{ include "arr.fullname" $ }}-{{ $appName }}-gluetun
+          image: qmcgaw/gluetun
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+          volumeMounts:
+            - name: {{ include "arr.fullname" $ }}-{{ $appName }}-gluetun
+              mountPath: /gluetun
+          env:
+            {{- range $envVar := $.Values.gluetun.env }}
+            - name: {{ $envVar.name }}
+              {{- if $envVar.value }}
+              value: {{ $envVar.value | quote }}
+              {{- else if $envVar.valueFrom }}
+              valueFrom:
+                {{- toYaml $envVar.valueFrom | nindent 16 }}
+              {{- end }}
+            {{- end }}
+        {{- end }}
+        - name: {{ $appName }} # Container name based on the app key
+          image: "{{ $appConfig.image.repository }}:{{ $appConfig.image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ $appConfig.image.pullPolicy }}
+          {{- if $appConfig.resources }}
+          resources:
+            {{- toYaml $appConfig.resources | nindent 12 }}
+          {{- end }}
+          {{- if $appConfig.env }}
+          env:
+            {{- range $envVar := $appConfig.env }}
+            - name: {{ $envVar.name }}
+              {{- if $envVar.value }}
+              value: {{ $envVar.value | quote }}
+              {{- else if $envVar.valueFrom }}
+              valueFrom:
+                {{- toYaml $envVar.valueFrom | nindent 16 }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+          volumeMounts:
+            {{- range $volName, $volConfig := $appConfig.storage }}
+            - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
+              mountPath: {{ $volConfig.path }}
+              {{- if $volConfig.subPath }}
+              subPath: {{ $volConfig.subPath }}
+              {{- end }}
+            {{- end }}
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: storage-type
+                  operator: In
+                  values:
+                    - nvme
+      volumes:
+        {{- range $volName, $volConfig := $appConfig.storage }}
+        {{- if $volConfig.pvc }}
+        - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
+          persistentVolumeClaim:
+            claimName: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
+        {{- else }}
+        - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
+          hostPath:
+            path: {{ $volConfig.hostPath }}
+        {{- end }}
+        {{- if $appConfig.gluetun }}
+        - name: {{ include "arr.fullname" $ }}-{{ $appName }}-gluetun
+          emptyDir:
+            sizeLimit: 1Gi
+        {{- end }}
+        {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

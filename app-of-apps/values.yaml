@@ -18,7 +18,7 @@ applications:
       syncOptions:
         - CreateNamespace=true
   arr:
-    enabled: true
+    enabled: false
     name: arr
     namespace: argocd
     project: arr
@@ -26,6 +26,18 @@ applications:
       repoURL: https://github.com/padilin/k3s-argocdish.git
       targetRevision: main
       path: apps/arr
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: arr
+  sonarr:
+    enabled: true
+    name: sonarr
+    namespace: argocd
+    project: sonarr
+    source:
+      repoURL: https://github.com/padilin/k3s-argocdish.git
+      targetRevision: main
+      path: apps/sonarr
     destination:
       server: https://kubernetes.default.svc
       namespace: arr

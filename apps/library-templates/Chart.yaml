@@ -1,0 +1,5 @@
+apiVersion: v2
+name: library-templates
+description: Common chartsish
+type: library
+version: 0.1.0

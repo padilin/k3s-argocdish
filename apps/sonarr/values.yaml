@@ -1,0 +1,22 @@
+apps:
+  sonarr:
+    enabled: true
+    replicaCount: 1
+    image:
+      repository: lscr.io/linuxserver/sonarr
+      tag: 4.0.14.2939-ls279
+      pullPolicy: IfNotPresent
+    env:
+      - name: TZ
+        value: America/Chicago
+    storage:
+      config:
+        shared: false
+        path: /config
+        size: 5Gi
+        pvc: true
+      media-data:
+        shared: true
+        path: /data
+        size: 5Gi
+        pvc: true
