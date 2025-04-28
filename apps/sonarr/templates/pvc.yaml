@@ -1,1 +1,1 @@
-{{- include "library-templates._deployment.tpl" . | nindent 0 -}}
+{{- include "library-templates._pvc.tpl" . | nindent 0 -}}
