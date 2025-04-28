@@ -2,7 +2,7 @@
 {{- range $appName, $appConfig := .Values.apps }}
 {{- range $volName, $volConfig := $appConfig.storage }}
 {{- if $volConfig.pvc }}
-{{- if eq $volConfig.shared false }}
+{{- if not $volConfig.shared }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
