@@ -1,0 +1,10 @@
+apiVersion: v2
+name: qbittorrent
+description: A Helm chart for wbitorrent application-ish
+type: application
+dependencies:
+  - name: library-templates
+    version: 0.1.0
+    repository: file://../library-templates
+
+version: 0.1.0

@@ -1,0 +1,122 @@
+{{- range $appName, $appConfig := .Values.apps }} {{- /* Loop through each app defined in values */}}
+{{- if $appConfig.enabled }} {{- /* Only generate if app is enabled */}}
+{{- if $appConfig.stateful }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "arr.fullname" $ }}-{{ $appName }} 
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "arr.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $appName }} # Add specific app label
+spec:
+  serviceName: {{ include "arr.fullname" $ }}-{{ $appName }}-svc
+  replicas: {{ $appConfig.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "arr.selectorLabels" $ | nindent 6 }}
+      app.kubernetes.io/component: {{ $appName }} # Ensure selector includes the specific app
+  template:
+    metadata:
+      labels:
+        {{- include "arr.selectorLabels" $ | nindent 8 }}
+        app.kubernetes.io/component: {{ $appName }} # Add specific app label to pods
+    spec:
+      containers:
+        {{- if $appConfig.gluetun }}
+        - name: {{ include "arr.fullname" $ }}-{{ $appName }}-gluetun
+          image: qmcgaw/gluetun
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+            runAsUser: 0
+          volumeMounts:
+            - name: arr-{{ $appName }}-gluetun
+              mountPath: /gluetun
+          env:
+            {{- range $envVar := $.Values.gluetun.env }}
+            - name: {{ $envVar.name }}
+              {{- if $envVar.value }}
+              value: {{ $envVar.value | quote }}
+              {{- else if $envVar.valueFrom }}
+              valueFrom:
+                {{- toYaml $envVar.valueFrom | nindent 16 }}
+              {{- end }}
+            {{- end }}
+        {{- end }}
+        - name: {{ $appName }} # Container name based on the app key
+          image: "{{ $appConfig.image.repository }}:{{ $appConfig.image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ $appConfig.image.pullPolicy }}
+          {{- if $appConfig.resources }}
+          resources:
+            {{- toYaml $appConfig.resources | nindent 12 }}
+          {{- end }}
+          {{- if $appConfig.env }}
+          env:
+            {{- range $envVar := $appConfig.env }}
+            - name: {{ $envVar.name }}
+              {{- if $envVar.value }}
+              value: {{ $envVar.value | quote }}
+              {{- else if $envVar.valueFrom }}
+              valueFrom:
+                {{- toYaml $envVar.valueFrom | nindent 16 }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+          volumeMounts:
+            {{- range $volName, $volConfig := $appConfig.storage }}
+            - name: arr{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
+              mountPath: {{ $volConfig.path }}
+              {{- if $volConfig.subPath }}
+              subPath: {{ $volConfig.subPath }}
+              {{- end }}
+            {{- end }}
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      {{- if $appConfig.storageAffinity }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: storage-type
+                  operator: In
+                  values:
+                    - nvme
+      {{- end }}
+      volumes:
+        {{- if $appConfig.gluetun }}
+        - name: arr-{{ $appName }}-gluetun
+          emptyDir:
+        {{- end }}
+        {{- range $volName, $volConfig := $appConfig.storage }}
+        {{- if empty $volConfig.pvc }}
+        - name: arr{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
+          hostPath:
+            path: {{ $volConfig.hostPath }}
+        {{- end }}
+        {{- end }}
+  volumeClaimTemplates:
+    {{- range $volName, $volConfig := $appConfig.storage }}
+    {{- if $volConfig.pvc }}
+    - metadata:
+        name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
+      spec:
+        accessModes:
+          {{- if $volConfig.shared }}
+          - ReadWriteMany
+          {{- else }}
+          - ReadWriteOncePod
+          {{- end }}
+        storageClassName: longhorn-arr
+        resources:
+          requests:
+            storage: {{ $volConfig.size }}
+    {{- end }}
+    {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
