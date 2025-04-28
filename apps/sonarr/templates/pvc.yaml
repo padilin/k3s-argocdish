@@ -11,6 +11,8 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   finalizers:
     - kubernetes.io/pvc-protection
+  labels:
+    tj.test: {{ $volConfig.shared }}
 spec:
   accessModes:
     - ReadWriteOncePod
