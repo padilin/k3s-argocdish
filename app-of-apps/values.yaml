@@ -77,7 +77,6 @@ applications:
         value: America/Chicago
     storage:
       config:
-        shared: false
         path: /config
         size: 5Gi
         pvc: true
