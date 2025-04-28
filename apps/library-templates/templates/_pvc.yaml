@@ -6,17 +6,13 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: arr{{- if eq $volConfig.shared false }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
+  name: arr-{{ $appName }}-{{ $volName }}-pvc
   namespace: {{ $.Release.Namespace }}
   finalizers:
     - kubernetes.io/pvc-protection
 spec:
   accessModes:
-    {{- if eq $volConfig.shared true }}
-    - ReadWriteMany
-    {{- else }}
     - ReadWriteOncePod
-    {{- end }}
   resources:
     requests:
       storage: {{ $volConfig.size }}
