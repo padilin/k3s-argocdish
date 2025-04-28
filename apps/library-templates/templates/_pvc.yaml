@@ -7,7 +7,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
+  name: arr{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
   namespace: {{ $.Release.Namespace }}
   finalizers:
     - kubernetes.io/pvc-protection

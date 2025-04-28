@@ -1,6 +1,5 @@
 {{- define "arr.name" -}}
-# {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
-arr
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*

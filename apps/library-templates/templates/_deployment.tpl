@@ -32,7 +32,7 @@ spec:
             capabilities:
               add: ["NET_ADMIN"]
           volumeMounts:
-            - name: {{ include "arr.fullname" $ }}-{{ $appName }}-gluetun
+            - name: arr-{{ $appName }}-gluetun
               mountPath: /gluetun
           env:
             {{- range $envVar := $.Values.gluetun.env }}
@@ -66,7 +66,7 @@ spec:
           {{- end }}
           volumeMounts:
             {{- range $volName, $volConfig := $appConfig.storage }}
-            - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
+            - name: arr{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
               mountPath: {{ $volConfig.path }}
               {{- if $volConfig.subPath }}
               subPath: {{ $volConfig.subPath }}
@@ -90,16 +90,16 @@ spec:
       volumes:
         {{- range $volName, $volConfig := $appConfig.storage }}
         {{- if $volConfig.pvc }}
-        - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
+        - name: arr{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
           persistentVolumeClaim:
-            claimName: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
+            claimName: arr{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
         {{- else }}
-        - name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
+        - name: arr{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
           hostPath:
             path: {{ $volConfig.hostPath }}
         {{- end }}
         {{- if $appConfig.gluetun }}
-        - name: {{ include "arr.fullname" $ }}-{{ $appName }}-gluetun
+        - name: arr-{{ $appName }}-gluetun
           emptyDir:
             sizeLimit: 1Gi
         {{- end }}
