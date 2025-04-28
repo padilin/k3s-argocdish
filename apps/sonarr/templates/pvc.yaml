@@ -12,7 +12,7 @@ metadata:
   finalizers:
     - kubernetes.io/pvc-protection
   labels:
-    tj.test: {{ $volConfig.shared }}
+    tj.test: {{ $volConfig.shared | quote }}
 spec:
   accessModes:
     - ReadWriteOncePod
