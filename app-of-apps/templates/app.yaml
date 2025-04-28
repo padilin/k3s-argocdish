@@ -12,7 +12,15 @@ metadata:
     app.kubernetes.io/managed-by: helm-app-of-apps
 spec:
   project: {{ $appConfig.project | default "default" }}
-
+  
+  ignoreDifferences:
+  - group: "" # For core Kubernetes resources like PersistentVolumeClaim
+    kind: PersistentVolumeClaim
+    name: arr-media-data-pvc # The specific PVC to ignore differences on
+    namespace: arr # The namespace of the PVC
+    jsonPointers:
+      - /metadata/labels # Ignore all label differences on this PVC
+  
   source:
     repoURL: {{ $appConfig.source.repoURL | quote }}
     
