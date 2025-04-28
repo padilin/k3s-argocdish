@@ -86,6 +86,37 @@ applications:
         path: /data
         size: 5Gi
         pvc: true
+  radarr:
+    enabled: true
+    name: radarr
+    namespace: argocd
+    project: arr
+    source:
+      repoURL: https://github.com/padilin/k3s-argocdish.git
+      targetRevision: main
+      path: apps/radarr
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: arr
+    replicaCount: 1
+    image:
+      repository: lscr.io/linuxserver/radarr
+      tag: latest
+      pullPolicy: IfNotPresent
+    env:
+      - name: TZ
+        value: America/Chicago
+    storage:
+      config:
+        path: /config
+        size: 5Gi
+        pvc: true
+        shared: false
+      media-data:
+        shared: true
+        path: /data
+        size: 5Gi
+        pvc: true
 gluetun:
   env:
     - name: TZ

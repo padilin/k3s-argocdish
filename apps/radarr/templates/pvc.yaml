@@ -1,0 +1,27 @@
+# {{- include "library-templates._pvc.tpl" . | nindent 0 -}}
+{{- range $appName, $appConfig := .Values.apps }}
+{{- range $volName, $volConfig := $appConfig.storage }}
+{{- if eq $volConfig.pvc true }}
+{{- if eq $volConfig.shared false }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: arr-{{ $appName }}-{{ $volName }}-pvc
+  namespace: {{ $.Release.Namespace }}
+  finalizers:
+    - kubernetes.io/pvc-protection
+  labels:
+    tj.test: {{ $volConfig.shared | quote }}
+spec:
+  accessModes:
+    - ReadWriteOncePod
+  resources:
+    requests:
+      storage: {{ $volConfig.size }}
+  storageClassName: longhorn-arr
+  volumeMode: Filesystem
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
