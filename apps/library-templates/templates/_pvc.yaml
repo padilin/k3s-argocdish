@@ -1,8 +1,7 @@
 {{- define "library-templates._pvc.tpl" -}}
 {{- range $appName, $appConfig := .Values.apps }}
 {{- range $volName, $volConfig := $appConfig.storage }}
-{{- if $volConfig.pvc }}
-{{- if not $volConfig.shared }}
+{{- if $volConfig.pvc and not $volConfig.shared }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
