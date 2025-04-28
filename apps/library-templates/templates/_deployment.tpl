@@ -77,6 +77,7 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
       affinity:
+        {{- if $appConfig.affinity }}
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
@@ -85,6 +86,7 @@ spec:
                   operator: In
                   values:
                     - nvme
+        {{- end }}
       volumes:
         {{- range $volName, $volConfig := $appConfig.storage }}
         {{- if $volConfig.pvc }}
