@@ -1,7 +1,7 @@
 {{- define "library-templates._pvc.tpl" -}}
 {{- range $appName, $appConfig := .Values.apps }}
 {{- range $volName, $volConfig := $appConfig.storage }}
-{{- if $volConfig.pvc and not $volConfig.shared }}
+{{- if eq $volConfig.pvc true and eq $volConfig.shared false }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -12,7 +12,7 @@ metadata:
     - kubernetes.io/pvc-protection
 spec:
   accessModes:
-    {{- if $volConfig.shared }}
+    {{- if eq $volConfig.shared true }}
     - ReadWriteMany
     {{- else }}
     - ReadWriteOncePod
