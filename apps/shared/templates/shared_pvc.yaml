@@ -7,6 +7,8 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   finalizers:
     - kubernetes.io/pvc-protection
+  labels:
+    argocd.argoproj.io/instance: argocd_sharedarr
 spec:
   accessModes:
     {{- if $volConfig.shared }}
