@@ -103,7 +103,7 @@ spec:
     {{- range $volName, $volConfig := $appConfig.storage }}
     {{- if $volConfig.pvc }}
     - metadata:
-        name: {{ include "arr.fullname" $ }}{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
+        name: arr{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
       spec:
         accessModes:
           {{- if $volConfig.shared }}
