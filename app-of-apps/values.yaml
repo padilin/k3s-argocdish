@@ -79,7 +79,8 @@ applications:
       config:
         path: /config
         size: 5Gi
-        pvc: false
+        pvc: true
+        shared: false
       media-data:
         shared: true
         path: /data
