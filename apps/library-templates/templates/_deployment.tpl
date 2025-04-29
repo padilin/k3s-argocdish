@@ -84,7 +84,7 @@ spec:
         {{- else }}
         - name: {{ $.Values.name }}{{- if not $volumeConfig.shared}}-{{ $appConfig.name }}{{- end }}-{{ $volumeConfig.name }}
           hostPath:
-            path: {{ $volConfig.hostPath }}
+            path: {{ $volumeConfig.hostPath }}
         {{- end }}
         {{- end }}
 ---

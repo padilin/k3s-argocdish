@@ -16,7 +16,7 @@ spec:
     - ReadWriteOncePod
   resources:
     requests:
-      storage: {{ $volConfig.size }}
+      storage: {{ $volumeConfig.size }}
   storageClassName: longhorn-arr
   volumeMode: Filesystem
 ---
