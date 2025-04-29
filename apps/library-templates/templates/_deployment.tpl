@@ -11,25 +11,25 @@ metadata:
   labels:
     helm.sh/chart: {{ $.Values.name }}-{{ $.Chart.Version }}
     app.kubernetes.io/name: {{ $.Values.name }}-{{ $appConfig.name }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    {{- if .Chart.AppVersion }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    {{- if $.Chart.AppVersion }}
+    app.kubernetes.io/version: {{ $.Chart.AppVersion | quote }}
     {{- end }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/managed-by: {{ $.Release.Service }}
     app.kubernetes.io/component: {{ $appConfig.name }}
 spec:
   replicas: {{ $appConfig.replicaCount }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ $.Values.name }}-{{ $appConfig.name }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/instance: {{ $.Release.Name }}
       app.kubernetes.io/component: {{ $appConfig.name }}
   revisionHistoryLimit: 3
   template:
     metadata:
       labels:
         app.kubernetes.io/name: {{ $.Values.name }}-{{ $appConfig.name }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/instance: {{ $.Release.Name }}
         app.kubernetes.io/component: {{ $appConfig.name }}
     spec:
       containers:
