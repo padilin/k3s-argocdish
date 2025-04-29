@@ -9,7 +9,7 @@ metadata:
   name: {{ $.Values.name }}-{{ $appConfig.name }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    helm.sh/chart: {{ $.Values.name }}-{{ .Chart.Version }}
+    helm.sh/chart: {{ $.Values.name }}-{{ $.Chart.Version }}
     app.kubernetes.io/name: {{ $.Values.name }}-{{ $appConfig.name }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     {{- if .Chart.AppVersion }}
