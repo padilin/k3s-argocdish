@@ -64,16 +64,26 @@ spec:
 {{ $.Values.gluetun | toYaml | indent 10 }}
         {{- if $appConfig.sharedStorageRoot }}
         allSharedPVC:
+          {{- $uniqueStorageConfigs := list -}}
+          {{- $seenKeys := dict -}}
+
           {{- range $otherName, $otherApps := $.Values.applications }}
-          {{- if $otherApps.storage }}
-          {{- range $otherStoreName, $otherStoreConfig := $otherApps.storage }}
-          {{- if $otherStoreConfig.shared }}
-          {{ $otherStoreName }}:
+          {{- range $storageName, $storageConfig := $otherApps.storage -}}
+            {{- $uniqueKey := printf "%s-%v" $storageName $storageConfig.size -}}
+
+            {{- if not (hasKey $seenKeys $uniqueKey) -}}
+              {{- $_ := set $seenKeys $uniqueKey true -}}
+              {{- $uniqueStorageConfigs = append $uniqueStorageConfigs $storageConfig -}}
+            {{- end }}
+          {{- end }}
+          {{- end }}
+
+          {{- range $uniqueStorageConfig := $uniqueStorageConfigs }}
+          {{- if $uniqueStorageConfig.shared }}
+          arr-{{ $uniqueStorageConfig.name }}-pvc:
             pvc: true
             shared: true
-            size: {{ $otherStoreConfig.size }}
-          {{- end }}
-          {{- end }}
+            size: {{ $uniqueStorageConfigs.size }}
           {{- end }}
           {{- end }}
         {{- end }}
