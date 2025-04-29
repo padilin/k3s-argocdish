@@ -1,4 +1,4 @@
-{{- range $appName, $appConfig := .Values.applications }}
+{{- range $appConfig := .Values.applications }}
 {{- if $appConfig.enabled }}
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -12,15 +12,6 @@ metadata:
     app.kubernetes.io/managed-by: helm-app-of-apps
 spec:
   project: {{ $appConfig.project | default "default" }}
-  
-  ignoreDifferences:
-  - group: "" # For core Kubernetes resources like PersistentVolumeClaim
-    kind: PersistentVolumeClaim
-    name: arr-media-data-pvc # The specific PVC to ignore differences on
-    namespace: arr # The namespace of the PVC
-    jsonPointers:
-      - /metadata/labels # Ignore all label differences on this PVC
-  
   source:
     repoURL: {{ $appConfig.source.repoURL | quote }}
     
@@ -55,38 +46,6 @@ spec:
           value: {{ $param.value | quote }}
       {{- end }}
       {{- end }}
-    {{- else }}
-      values: |
-        apps:
-{{ $appName | toYaml | indent 10 }}:
-{{ $appConfig | toYaml | indent 12 }}
-        gluetun:
-{{ $.Values.gluetun | toYaml | indent 10 }}
-        {{- if $appConfig.sharedStorageRoot }}
-        allSharedPVC:
-          {{- $uniqueStorageConfigs := list -}}
-          {{- $seenKeys := dict -}}
-
-          {{- range $otherName, $otherApps := $.Values.applications }}
-          {{- range $storageName, $storageConfig := $otherApps.storage -}}
-            {{- $uniqueKey := printf "%s-%v" $storageName $storageConfig.size -}}
-
-            {{- if not (hasKey $seenKeys $uniqueKey) -}}
-              {{- $_ := set $seenKeys $uniqueKey true -}}
-              {{- $uniqueStorageConfigs = append $uniqueStorageConfigs $storageConfig -}}
-            {{- end }}
-          {{- end }}
-          {{- end }}
-
-          {{- range $uniqueStorageConfig := $uniqueStorageConfigs }}
-          {{- if $uniqueStorageConfig.shared }}
-          arr-{{ $uniqueStorageConfig.name }}-pvc:
-            pvc: true
-            shared: true
-            size: {{ $uniqueStorageConfigs.size }}
-          {{- end }}
-          {{- end }}
-        {{- end }}
     {{- end }}
 
   destination:
@@ -99,6 +58,5 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-
 {{- end }}
 {{- end }}

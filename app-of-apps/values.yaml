@@ -1,191 +1,204 @@
+# applications:
+#   argocd:
+#     enabled: false
+#     name: argocd
+#     namespace: argocd
+#     project: default
+#     source:
+#       repoURL: https://github.com/padilin/k3s-argocdish.git
+#       targetRevision: main
+#       path: apps/argocd
+#     destination:
+#       server: https://kubernetes.default.svc
+#       namespace: argocd
+#     syncPolicy:
+#       automated:
+#         prune: true
+#         selfHeal: true
+#       syncOptions:
+#         - CreateNamespace=true
+#   arr:
+#     enabled: false
+#     name: arr
+#     namespace: argocd
+#     project: arr
+#     source:
+#       repoURL: https://github.com/padilin/k3s-argocdish.git
+#       targetRevision: main
+#       path: apps/arr
+#     destination:
+#       server: https://kubernetes.default.svc
+#       namespace: arr
+#   # shared:
+#   #   enable: true
+#   #   name: shared
+#   #   namespace: argocd
+#   #   project: arr
+#   #   sharedStorageRoot: true
+#   #   source:
+#   #     repoURL: https://github.com/padilin/k3s-argocdish.git
+#   #     targetRevision: main
+#   #     path: apps/shared
+#   #   destination:
+#   #     server: https://kubernetes.default.svc
+#   #     namespace: arr
+#   sharedarr:
+#     enabled: true
+#     name: sharedarr
+#     namespace: argocd
+#     project: arr
+#     sharedStorageRoot: true
+#     source:
+#       repoURL: https://github.com/padilin/k3s-argocdish.git
+#       targetRevision: main
+#       path: apps/shared
+#     destination:
+#       server: https://kubernetes.default.svc
+#       namespace: arr
+#   sonarr:
+#     enabled: true
+#     name: sonarr
+#     namespace: argocd
+#     project: arr
+#     source:
+#       repoURL: https://github.com/padilin/k3s-argocdish.git
+#       targetRevision: main
+#       path: apps/sonarr
+#     destination:
+#       server: https://kubernetes.default.svc
+#       namespace: arr
+#     replicaCount: 1
+#     image:
+#       repository: lscr.io/linuxserver/sonarr
+#       tag: 4.0.14.2939-ls279
+#       pullPolicy: IfNotPresent
+#     env:
+#       - name: TZ
+#         value: America/Chicago
+#     storage:
+#       config:
+#         path: /config
+#         size: 5Gi
+#         pvc: true
+#         shared: false
+#       media-data:
+#         shared: true
+#         path: /data
+#         size: 5Gi
+#         pvc: true
+#   radarr:
+#     enabled: true
+#     name: radarr
+#     namespace: argocd
+#     project: arr
+#     source:
+#       repoURL: https://github.com/padilin/k3s-argocdish.git
+#       targetRevision: main
+#       path: apps/radarr
+#     destination:
+#       server: https://kubernetes.default.svc
+#       namespace: arr
+#     replicaCount: 1
+#     image:
+#       repository: lscr.io/linuxserver/radarr
+#       tag: latest
+#       pullPolicy: IfNotPresent
+#     env:
+#       - name: TZ
+#         value: America/Chicago
+#     storage:
+#       config:
+#         path: /config
+#         size: 5Gi
+#         pvc: true
+#         shared: false
+#       media-data:
+#         shared: true
+#         path: /data
+#         size: 5Gi
+#         pvc: true
+#   qbittorrent:
+#     enabled: true
+#     name: qbittorrent
+#     namespace: argocd
+#     project: arr
+#     replicaCount: 1
+#     gluetun: true
+#     stateful: true
+#     storageAffinity: true
+#     image:
+#       repository: lscr.io/linuxserver/qbittorrent
+#       tag: latest
+#       pullPolicy: IfNotPresent
+#     source:
+#       repoURL: https://github.com/padilin/k3s-argocdish.git
+#       targetRevision: main
+#       path: apps/qbittorrent
+#     destination:
+#       server: https://kubernetes.default.svc
+#       namespace: arr
+#     env:
+#       - name: TZ
+#         value: America/Chicago
+#     storage:
+#       config:
+#         shared: false
+#         path: /config
+#         size: 5Gi
+#         pvc: true
+#       media-data:
+#         shared: true
+#         path: /data
+#         size: 5Gi
+#         subPath: ./torrents
+#         pvc: true
+#     ports:
+#       - name: http-webui
+#         port: 8080
+#         protocol: TCP
+#       - name: bittorrent-tcp
+#         port: 6881
+#         protocol: TCP
+#       - name: bittorrent-udp
+#         port: 6881
+#         protocol: UDP
+# gluetun:
+#   env:
+#     - name: TZ
+#       value: America/Chicago
+#     - name: UPDATE_PERIOD
+#       value: 24h
+#     - name: VPN_TYPE
+#       value: wireguard
+#     - name: PORT_FORWARD_ONLY
+#       value: on
+#     - name: VPN_PORT_FORWARDING_UP_COMMAND
+#       value: /bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{PORTS}}}" http://127.0.0.1:8080/api/v2/app/setPreferences 2>&1'
+#     - name: VPN_SERVICE_PROVIDER
+#       valueFrom:
+#         secretKeyRef:
+#           name: arr-gluetun-secret
+#           key: vpn_service_provider
+#     - name: WIREGUARD_PRIVATE_KEY
+#       valueFrom:
+#         secretKeyRef:
+#           name: arr-gluetun-secret
+#           key: wireguard_private_key
+#     - name: SERVER_COUNTRIES
+#       valueFrom:
+#         secretKeyRef:
+#           name: arr-gluetun-secret
+#           key: server_countries
+
 applications:
-  argocd:
-    enabled: false
-    name: argocd
-    namespace: argocd
-    project: default
-    source:
-      repoURL: https://github.com/padilin/k3s-argocdish.git
-      targetRevision: main
-      path: apps/argocd
-    destination:
-      server: https://kubernetes.default.svc
-      namespace: argocd
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-      syncOptions:
-        - CreateNamespace=true
-  arr:
-    enabled: false
-    name: arr
-    namespace: argocd
-    project: arr
-    source:
-      repoURL: https://github.com/padilin/k3s-argocdish.git
-      targetRevision: main
-      path: apps/arr
-    destination:
-      server: https://kubernetes.default.svc
-      namespace: arr
-  # shared:
-  #   enable: true
-  #   name: shared
-  #   namespace: argocd
-  #   project: arr
-  #   sharedStorageRoot: true
-  #   source:
-  #     repoURL: https://github.com/padilin/k3s-argocdish.git
-  #     targetRevision: main
-  #     path: apps/shared
-  #   destination:
-  #     server: https://kubernetes.default.svc
-  #     namespace: arr
-  sharedarr:
+  - name: sonarr
     enabled: true
-    name: sharedarr
-    namespace: argocd
-    project: arr
-    sharedStorageRoot: true
-    source:
-      repoURL: https://github.com/padilin/k3s-argocdish.git
-      targetRevision: main
-      path: apps/shared
-    destination:
-      server: https://kubernetes.default.svc
-      namespace: arr
-  sonarr:
-    enabled: true
-    name: sonarr
-    namespace: argocd
+    namespace: arr
     project: arr
     source:
       repoURL: https://github.com/padilin/k3s-argocdish.git
-      targetRevision: main
       path: apps/sonarr
-    destination:
-      server: https://kubernetes.default.svc
-      namespace: arr
-    replicaCount: 1
-    image:
-      repository: lscr.io/linuxserver/sonarr
-      tag: 4.0.14.2939-ls279
-      pullPolicy: IfNotPresent
-    env:
-      - name: TZ
-        value: America/Chicago
-    storage:
-      config:
-        path: /config
-        size: 5Gi
-        pvc: true
-        shared: false
-      media-data:
-        shared: true
-        path: /data
-        size: 5Gi
-        pvc: true
-  radarr:
-    enabled: true
-    name: radarr
-    namespace: argocd
-    project: arr
-    source:
-      repoURL: https://github.com/padilin/k3s-argocdish.git
       targetRevision: main
-      path: apps/radarr
     destination:
       server: https://kubernetes.default.svc
       namespace: arr
-    replicaCount: 1
-    image:
-      repository: lscr.io/linuxserver/radarr
-      tag: latest
-      pullPolicy: IfNotPresent
-    env:
-      - name: TZ
-        value: America/Chicago
-    storage:
-      config:
-        path: /config
-        size: 5Gi
-        pvc: true
-        shared: false
-      media-data:
-        shared: true
-        path: /data
-        size: 5Gi
-        pvc: true
-  qbittorrent:
-    enabled: true
-    name: qbittorrent
-    namespace: argocd
-    project: arr
-    replicaCount: 1
-    gluetun: true
-    stateful: true
-    storageAffinity: true
-    image:
-      repository: lscr.io/linuxserver/qbittorrent
-      tag: latest
-      pullPolicy: IfNotPresent
-    source:
-      repoURL: https://github.com/padilin/k3s-argocdish.git
-      targetRevision: main
-      path: apps/qbittorrent
-    destination:
-      server: https://kubernetes.default.svc
-      namespace: arr
-    env:
-      - name: TZ
-        value: America/Chicago
-    storage:
-      config:
-        shared: false
-        path: /config
-        size: 5Gi
-        pvc: true
-      media-data:
-        shared: true
-        path: /data
-        size: 5Gi
-        subPath: ./torrents
-        pvc: true
-    ports:
-      - name: http-webui
-        port: 8080
-        protocol: TCP
-      - name: bittorrent-tcp
-        port: 6881
-        protocol: TCP
-      - name: bittorrent-udp
-        port: 6881
-        protocol: UDP
-gluetun:
-  env:
-    - name: TZ
-      value: America/Chicago
-    - name: UPDATE_PERIOD
-      value: 24h
-    - name: VPN_TYPE
-      value: wireguard
-    - name: PORT_FORWARD_ONLY
-      value: on
-    - name: VPN_PORT_FORWARDING_UP_COMMAND
-      value: /bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{PORTS}}}" http://127.0.0.1:8080/api/v2/app/setPreferences 2>&1'
-    - name: VPN_SERVICE_PROVIDER
-      valueFrom:
-        secretKeyRef:
-          name: arr-gluetun-secret
-          key: vpn_service_provider
-    - name: WIREGUARD_PRIVATE_KEY
-      valueFrom:
-        secretKeyRef:
-          name: arr-gluetun-secret
-          key: wireguard_private_key
-    - name: SERVER_COUNTRIES
-      valueFrom:
-        secretKeyRef:
-          name: arr-gluetun-secret
-          key: server_countries

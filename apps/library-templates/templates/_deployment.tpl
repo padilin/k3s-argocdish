@@ -1,52 +1,40 @@
 {{- define "library-templates._deployment.tpl" -}}
-{{- range $appName, $appConfig := .Values.apps }} {{- /* Loop through each app defined in values */}}
-{{- if $appConfig.enabled }} {{- /* Only generate if app is enabled */}}
-{{- if empty $appConfig.stateful }}
+{{- range $appConfig := .Values.apps }} {{- /* Loop through each app defined in values */}}
+{{- if $appConfig.enabled }}
+{{- if eq $appConfig.kind "deployment" }}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "arr.fullname" $ }}-{{ $appName }} 
+  name: {{ $.Values.name }}-{{ $appConfig.name }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    {{- include "arr.labels" $ | nindent 4 }}
-    app.kubernetes.io/component: {{ $appName }} # Add specific app label
+    helm.sh/chart: {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+    app.kubernetes.io/name: {{ $.Values.name }}-{{ $appConfig.name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- if .Chart.AppVersion }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    {{- end }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/component: {{ $appConfig.name }}
 spec:
   replicas: {{ $appConfig.replicaCount }}
   selector:
     matchLabels:
-      {{- include "arr.selectorLabels" $ | nindent 6 }}
-      app.kubernetes.io/component: {{ $appName }} # Ensure selector includes the specific app
+      app.kubernetes.io/name: {{ $.Values.name }}-{{ $appConfig.name }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: {{ $appConfig.name }}
   revisionHistoryLimit: 3
   template:
     metadata:
       labels:
-        {{- include "arr.selectorLabels" $ | nindent 8 }}
-        app.kubernetes.io/component: {{ $appName }} # Add specific app label to pods
+        app.kubernetes.io/name: {{ $.Values.name }}-{{ $appConfig.name }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: {{ $appConfig.name }}
     spec:
       containers:
-        {{- if $appConfig.gluetun }}
-        - name: {{ include "arr.fullname" $ }}-{{ $appName }}-gluetun
-          image: qmcgaw/gluetun
-          securityContext:
-            capabilities:
-              add: ["NET_ADMIN"]
-          volumeMounts:
-            - name: arr-{{ $appName }}-gluetun
-              mountPath: /gluetun
-          env:
-            {{- range $envVar := $.Values.gluetun.env }}
-            - name: {{ $envVar.name }}
-              {{- if $envVar.value }}
-              value: {{ $envVar.value | quote }}
-              {{- else if $envVar.valueFrom }}
-              valueFrom:
-                {{- toYaml $envVar.valueFrom | nindent 16 }}
-              {{- end }}
-            {{- end }}
-        {{- end }}
-        - name: {{ $appName }} # Container name based on the app key
-          image: "{{ $appConfig.image.repository }}:{{ $appConfig.image.tag | default $.Chart.AppVersion }}"
+        - name: {{ $appConfig.name }} # Container name based on the app key
+          image: "{{ $appConfig.image.repository }}:{{ $appConfig.image.tag }}"
           imagePullPolicy: {{ $appConfig.image.pullPolicy }}
           {{- if $appConfig.resources }}
           resources:
@@ -65,11 +53,11 @@ spec:
             {{- end }}
           {{- end }}
           volumeMounts:
-            {{- range $volName, $volConfig := $appConfig.storage }}
-            - name: arr{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
-              mountPath: {{ $volConfig.path }}
-              {{- if $volConfig.subPath }}
-              subPath: {{ $volConfig.subPath }}
+            {{- range $volumeConfig := $appConfig.storage }}
+            - name: {{ $.Values.name }}{{- if not $volumeConfig.shared}}-{{ $appConfig.name }}{{- end }}-{{ $volumeConfig.name }}
+              mountPath: {{ $volumeConfig.path }}
+              {{- if $volumeConfig.subPath }}
+              subPath: {{ $volumeConfig.subPath }}
               {{- end }}
             {{- end }}
       securityContext:
@@ -88,22 +76,19 @@ spec:
                     - nvme
         {{- end }}
       volumes:
-        {{- range $volName, $volConfig := $appConfig.storage }}
-        {{- if $volConfig.pvc }}
-        - name: arr{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
+        {{- range $volumeConfig := $appConfig.storage }}
+        {{- if $volumeConfig.pvc }}
+        - name: {{ $.Values.name }}{{- if not $volumeConfig.shared}}-{{ $appConfig.name }}{{- end }}-{{ $volumeConfig.name }}
           persistentVolumeClaim:
-            claimName: arr{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
+            claimName: {{ $.Values.name }}{{- if not $volumeConfig.shared}}-{{ $appConfig.name }}{{- end }}-{{ $volumeConfig.name }}-pvc
         {{- else }}
-        - name: arr{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}
+        - name: {{ $.Values.name }}{{- if not $volumeConfig.shared}}-{{ $appConfig.name }}{{- end }}-{{ $volumeConfig.name }}
           hostPath:
             path: {{ $volConfig.hostPath }}
         {{- end }}
-        {{- if $appConfig.gluetun }}
-        - name: arr-{{ $appName }}-gluetun
-          emptyDir:
-            sizeLimit: 1Gi
         {{- end }}
-        {{- end }}
+---
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
