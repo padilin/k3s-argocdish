@@ -80,7 +80,7 @@ spec:
         {{- if $volumeConfig.pvc }}
         - name: {{ $.Values.name }}{{- if not $volumeConfig.shared}}-{{ $appConfig.name }}{{- end }}-{{ $volumeConfig.name }}
           persistentVolumeClaim:
-            claimName: {{- if volumeConfig.shared }}arr{{- else }}{{ $.Values.name }}{{- end }}{{- if not $volumeConfig.shared}}-{{ $appConfig.name }}{{- end }}-{{ $volumeConfig.name }}-pvc
+            claimName: {{- if $volumeConfig.shared }}arr{{- else }}{{ $.Values.name }}{{- end }}{{- if not $volumeConfig.shared}}-{{ $appConfig.name }}{{- end }}-{{ $volumeConfig.name }}-pvc
         {{- else }}
         - name: {{ $.Values.name }}{{- if not $volumeConfig.shared}}-{{ $appConfig.name }}{{- end }}-{{ $volumeConfig.name }}
           hostPath:
