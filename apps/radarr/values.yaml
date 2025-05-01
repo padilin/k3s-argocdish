@@ -1,11 +1,11 @@
-name: sonarr
+name: radarr
 apps:
-  - name: sonarr
+  - name: radarr
     enabled: true
     kind: deployment
     replicaCount: 1
     image:
-      repository: lscr.io/linuxserver/sonarr
+      repository: lscr.io/linuxserver/radarr
       tag: latest
       pullPolicy: IfNotPresent
     env:
