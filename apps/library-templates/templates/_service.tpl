@@ -11,7 +11,8 @@ spec:
     app.kubernetes.io/name: {{ $.Values.name }}-{{ $appConfig.name }}
   ports:
   {{- range $portConfig := $appConfig.ports }}
-    - protocol: {{ $portConfig.protocol }}
+    - name: {{ $portConfig.name }}
+      protocol: {{ $portConfig.protocol }}
       port: {{ $portConfig.port }}
       {{- if $portConfig.targetPort }}
       targetPort: {{ $portConfig.targetPort }}

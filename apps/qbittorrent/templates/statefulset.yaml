@@ -40,7 +40,7 @@ spec:
               add: ["NET_ADMIN"]
             runAsUser: 0
           volumeMounts:
-            - name: arr-{{ $appName }}-gluetun
+            - name: arr-{{ $appConfig.name }}-gluetun
               mountPath: /gluetun
           env:
             {{- range $envVar := $appConfig.gluetun.env }}
@@ -53,7 +53,7 @@ spec:
               {{- end }}
             {{- end }}
         {{- end }}
-        - name: {{ $appName }} # Container name based on the app key
+        - name: {{ $appConfig.name }} # Container name based on the app key
           image: "{{ $appConfig.image.repository }}:{{ $appConfig.image.tag | default $.Chart.AppVersion }}"
           imagePullPolicy: {{ $appConfig.image.pullPolicy }}
           {{- if $appConfig.resources }}

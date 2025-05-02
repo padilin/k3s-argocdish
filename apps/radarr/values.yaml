@@ -23,6 +23,7 @@ apps:
         size: 5Gi
         pvc: true
     ports:
-      - protocol: TCP
+      - name: radarr-http
+        protocol: TCP
         port: 7878
         targetPort: 7878
