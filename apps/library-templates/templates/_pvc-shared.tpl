@@ -7,7 +7,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: arr-{{ $volName }}-pvc
+  name: arr-shared-{{ $volumeConfig.name }}-pvc
   namespace: {{ $.Release.Namespace }}
   finalizers:
     - kubernetes.io/pvc-protection
@@ -19,6 +19,7 @@ spec:
       storage: {{ $volConfig.size }}
   storageClassName: longhorn-arr
   volumeMode: Filesystem
+---
 {{- end }}
 {{- end }}
 {{- end }}

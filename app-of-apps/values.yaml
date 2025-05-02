@@ -202,6 +202,17 @@ applications:
     destination:
       server: https://kubernetes.default.svc
       namespace: arr
+  - name: radarr
+    enabled: true
+    namespace: argocd
+    project: arr
+    source:
+      repoURL: https://github.com/padilin/k3s-argocdish.git
+      path: apps/radarr
+      targetRevision: main
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: arr
   - name: shared
     enabled: true
     namespace: argocd

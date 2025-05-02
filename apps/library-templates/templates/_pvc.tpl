@@ -7,7 +7,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ $.Values.name }}-{{ $volumeConfig.name }}-pvc
+  name: arr-{{ $appConfig.name }}-{{ $volumeConfig.name }}-pvc
   namespace: {{ $.Release.Namespace }}
   finalizers:
     - kubernetes.io/pvc-protection

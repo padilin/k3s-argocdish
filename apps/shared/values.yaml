@@ -1,0 +1,10 @@
+name: sonarr
+apps:
+  - name: shared
+    enabled: true
+    storage:
+      - name: mediadata
+        shared: true
+        path: /data
+        size: 5Gi
+        pvc: true

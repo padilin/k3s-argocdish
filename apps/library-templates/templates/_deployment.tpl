@@ -54,7 +54,11 @@ spec:
           {{- end }}
           volumeMounts:
             {{- range $volumeConfig := $appConfig.storage }}
-            - name: {{ $.Values.name }}{{- if not $volumeConfig.shared}}-{{ $appConfig.name }}{{- end }}-{{ $volumeConfig.name }}
+              {{- if $volumeConfig.shared }}
+            - name: arr-shared-{{ $volumeConfig.name }}-pvc
+              {{- else }}
+            - name: arr-{{ $appConfig.name }}-{{ $volumeConfig.name }}-pvc
+              {{- end }}
               mountPath: {{ $volumeConfig.path }}
               {{- if $volumeConfig.subPath }}
               subPath: {{ $volumeConfig.subPath }}
@@ -78,9 +82,17 @@ spec:
       volumes:
         {{- range $volumeConfig := $appConfig.storage }}
         {{- if $volumeConfig.pvc }}
-        - name: {{ $.Values.name }}{{- if not $volumeConfig.shared}}-{{ $appConfig.name }}{{- end }}-{{ $volumeConfig.name }}
+          {{- if $volumeConfig.shared }}
+        - name: arr-shared-{{ $volumeConfig.name }}-pvc
+          {{- else }}
+        - name: arr-{{ $appConfig.name }}-{{ $volumeConfig.name }}-pvc
+          {{- end }}
           persistentVolumeClaim:
-            claimName: {{- if $volumeConfig.shared }}arr{{- else }}{{ $.Values.name }}{{- end }}{{- if not $volumeConfig.shared}}-{{ $appConfig.name }}{{- end }}-{{ $volumeConfig.name }}-pvc
+            {{- if $volumeConfig.shared }}
+            claimName: arr-shared-{{ $volumeConfig.name }}-pvc
+            {{- else }}
+            claimName: arr-{{ $appConfig.name }}-{{ $volumeConfig.name }}-pvc
+            {{- end }}
         {{- else }}
         - name: {{ $.Values.name }}{{- if not $volumeConfig.shared}}-{{ $appConfig.name }}{{- end }}-{{ $volumeConfig.name }}
           hostPath:
