@@ -22,3 +22,7 @@ apps:
         path: /data
         size: 5Gi
         pvc: true
+    ports:
+      - protocol: TCP
+        port: 8989
+        targetPort: 8989
