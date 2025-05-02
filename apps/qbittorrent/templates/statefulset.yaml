@@ -100,6 +100,8 @@ spec:
                     - nvme
       {{- end }}
       volumes:
+        - name: arr-{{ $appConfig.name }}-gluetun
+          emptyDir:
         {{- range $volumeConfig := $appConfig.storage }}
         {{- if $volumeConfig.pvc }}
           {{- if $volumeConfig.shared }}
