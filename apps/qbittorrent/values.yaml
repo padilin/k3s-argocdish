@@ -50,7 +50,7 @@ apps:
         pvc: true
       - name: mediadata
         shared: true
-        path: /data
+        path: /downloads
         size: 5Gi
         subPath: ./torrents
         pvc: true

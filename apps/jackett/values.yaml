@@ -49,6 +49,7 @@ apps:
       - name: mediadata
         shared: true
         path: /data
+        subPath: ./torrents/blackhole
         size: 5Gi
         pvc: true
     ports:
