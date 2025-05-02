@@ -1,31 +1,39 @@
 {{- range $appName, $appConfig := .Values.apps }} {{- /* Loop through each app defined in values */}}
 {{- if $appConfig.enabled }} {{- /* Only generate if app is enabled */}}
-{{- if $appConfig.stateful }}
+{{- if eq $appConfig.kind "stateful" }}
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "arr.fullname" $ }}-{{ $appName }} 
+  name: {{ $.Values.name }}-{{ $appConfig.name }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    {{- include "arr.labels" $ | nindent 4 }}
-    app.kubernetes.io/component: {{ $appName }} # Add specific app label
+    helm.sh/chart: {{ $.Values.name }}-{{ $.Chart.Version }}
+    app.kubernetes.io/name: {{ $.Values.name }}-{{ $appConfig.name }}
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+    {{- if $.Chart.AppVersion }}
+    app.kubernetes.io/version: {{ $.Chart.AppVersion | quote }}
+    {{- end }}
+    app.kubernetes.io/managed-by: {{ $.Release.Service }}
+    app.kubernetes.io/component: {{ $appConfig.name }}
 spec:
-  serviceName: {{ include "arr.fullname" $ }}-{{ $appName }}-svc
+  serviceName: {{ $appConfig.name }}-svc
   replicas: {{ $appConfig.replicaCount }}
   selector:
     matchLabels:
-      {{- include "arr.selectorLabels" $ | nindent 6 }}
-      app.kubernetes.io/component: {{ $appName }} # Ensure selector includes the specific app
+      app.kubernetes.io/name: {{ $.Values.name }}-{{ $appConfig.name }}
+      app.kubernetes.io/instance: {{ $.Release.Name }}
+      app.kubernetes.io/component: {{ $appConfig.name }}
   template:
     metadata:
       labels:
-        {{- include "arr.selectorLabels" $ | nindent 8 }}
-        app.kubernetes.io/component: {{ $appName }} # Add specific app label to pods
+        app.kubernetes.io/name: {{ $.Values.name }}-{{ $appConfig.name }}
+        app.kubernetes.io/instance: {{ $.Release.Name }}
+        app.kubernetes.io/component: {{ $appConfig.name }}
     spec:
       containers:
         {{- if $appConfig.gluetun }}
-        - name: {{ include "arr.fullname" $ }}-{{ $appName }}-gluetun
+        - name: {{ $appConfig.name }}-gluetun
           image: qmcgaw/gluetun
           securityContext:
             capabilities:
@@ -65,11 +73,15 @@ spec:
             {{- end }}
           {{- end }}
           volumeMounts:
-            {{- range $volName, $volConfig := $appConfig.storage }}
-            - name: arr{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
-              mountPath: {{ $volConfig.path }}
-              {{- if $volConfig.subPath }}
-              subPath: {{ $volConfig.subPath }}
+            {{- range $volumeConfig := $appConfig.storage }}
+              {{- if $volumeConfig.shared }}
+            - name: arr-shared-{{ $volumeConfig.name }}-pvc
+              {{- else }}
+            - name: arr-{{ $appConfig.name }}-{{ $volumeConfig.name }}-pvc
+              {{- end }}
+              mountPath: {{ $volumeConfig.path }}
+              {{- if $volumeConfig.subPath }}
+              subPath: {{ $volumeConfig.subPath }}
               {{- end }}
             {{- end }}
       securityContext:
@@ -88,35 +100,43 @@ spec:
                     - nvme
       {{- end }}
       volumes:
-        {{- if $appConfig.gluetun }}
-        - name: arr-{{ $appName }}-gluetun
-          emptyDir:
-        {{- end }}
-        {{- range $volName, $volConfig := $appConfig.storage }}
-        {{- if empty $volConfig.pvc }}
-        - name: arr{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
-          hostPath:
-            path: {{ $volConfig.hostPath }}
-        {{- end }}
-        {{- end }}
-  volumeClaimTemplates:
-    {{- range $volName, $volConfig := $appConfig.storage }}
-    {{- if $volConfig.pvc }}
-    - metadata:
-        name: arr{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
-      spec:
-        accessModes:
-          {{- if $volConfig.shared }}
-          - ReadWriteMany
+        {{- range $volumeConfig := $appConfig.storage }}
+        {{- if $volumeConfig.pvc }}
+          {{- if $volumeConfig.shared }}
+        - name: arr-shared-{{ $volumeConfig.name }}-pvc
           {{- else }}
-          - ReadWriteOncePod
+        - name: arr-{{ $appConfig.name }}-{{ $volumeConfig.name }}-pvc
           {{- end }}
-        storageClassName: longhorn-arr
-        resources:
-          requests:
-            storage: {{ $volConfig.size }}
-    {{- end }}
-    {{- end }}
+          persistentVolumeClaim:
+            {{- if $volumeConfig.shared }}
+            claimName: arr-shared-{{ $volumeConfig.name }}-pvc
+            {{- else }}
+            claimName: arr-{{ $appConfig.name }}-{{ $volumeConfig.name }}-pvc
+            {{- end }}
+        {{- else }}
+        - name: {{ $.Values.name }}{{- if not $volumeConfig.shared}}-{{ $appConfig.name }}{{- end }}-{{ $volumeConfig.name }}
+          hostPath:
+            path: {{ $volumeConfig.hostPath }}
+        {{- end }}
+        {{- end }}
+  # volumeClaimTemplates:
+  #   {{- range $volName, $volConfig := $appConfig.storage }}
+  #   {{- if $volConfig.pvc }}
+  #   - metadata:
+  #       name: arr{{- if not $volConfig.shared }}-{{ $appName }}{{- end }}-{{ $volName }}-pvc
+  #     spec:
+  #       accessModes:
+  #         {{- if $volConfig.shared }}
+  #         - ReadWriteMany
+  #         {{- else }}
+  #         - ReadWriteOncePod
+  #         {{- end }}
+  #       storageClassName: longhorn-arr
+  #       resources:
+  #         requests:
+  #           storage: {{ $volConfig.size }}
+  #   {{- end }}
+  #   {{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

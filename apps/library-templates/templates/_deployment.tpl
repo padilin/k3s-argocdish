@@ -54,11 +54,11 @@ spec:
           {{- end }}
           volumeMounts:
             {{- range $volumeConfig := $appConfig.storage }}
-              {{- if $volumeConfig.shared }}
-            - name: arr-shared-{{ $volumeConfig.name }}-pvc
-              {{- else }}
-            - name: arr-{{ $appConfig.name }}-{{ $volumeConfig.name }}-pvc
-              {{- end }}
+            {{- if $volumeConfig.shared }}
+          - name: arr-shared-{{ $volumeConfig.name }}-pvc
+            {{- else }}
+          - name: arr-{{ $appConfig.name }}-{{ $volumeConfig.name }}-pvc
+            {{- end }}
               mountPath: {{ $volumeConfig.path }}
               {{- if $volumeConfig.subPath }}
               subPath: {{ $volumeConfig.subPath }}

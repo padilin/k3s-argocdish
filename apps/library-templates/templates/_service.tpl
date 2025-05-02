@@ -13,7 +13,10 @@ spec:
   {{- range $portConfig := $appConfig.ports }}
     - protocol: {{ $portConfig.protocol }}
       port: {{ $portConfig.port }}
+      {{- if $portConfig.targetPort }}
       targetPort: {{ $portConfig.targetPort }}
+      {{- else }}
+      targetPort: {{ $portConfig.port }}
   {{- end }}
 ---
 {{- end }}

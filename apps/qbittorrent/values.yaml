@@ -1,0 +1,36 @@
+name: qbittorrent
+apps:
+  - name: qbittorrent
+    enabled: true
+    kind: stateful
+    replicaCount: 1
+    gluetun: true
+    image:
+      repository: lscr.io/linuxserver/qbittorrent
+      tag: latest
+      pullPolicy: IfNotPresent
+    env:
+        - name: TZ
+          value: America/Chicago
+    storage:
+      config:
+        shared: false
+        path: /config
+        size: 5Gi
+        pvc: true
+      media-data:
+        shared: true
+        path: /data
+        size: 5Gi
+        subPath: ./torrents
+        pvc: true
+    ports:
+      - name: http-webui
+        port: 8080
+        protocol: TCP
+      - name: bittorrent-tcp
+        port: 6881
+        protocol: TCP
+      - name: bittorrent-udp
+        port: 6881
+        protocol: UDP
