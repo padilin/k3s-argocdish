@@ -23,6 +23,11 @@ apps:
         path: /data
         size: 5Gi
         pvc: true
+      - name: decoder
+        shared: false
+        path: /dev/video19
+        hostPath: /dev/video19
+        pvc: false
     ports:
       - name: jellyfin-http
         protocol: TCP

@@ -97,7 +97,7 @@ spec:
             {{- else }}
             claimName: arr-{{ $appConfig.name }}-{{ $volumeConfig.name }}-pvc
             {{- end }}
-        {{- else }}
+        {{- else if $volumeConfig.hostPath }}
         - name: {{ $.Values.name }}{{- if not $volumeConfig.shared}}-{{ $appConfig.name }}{{- end }}-{{ $volumeConfig.name }}
           hostPath:
             path: {{ $volumeConfig.hostPath }}
