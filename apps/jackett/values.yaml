@@ -1,5 +1,13 @@
 name: jackett
 apps:
+  - name: webtop
+    enabled: true
+    kind: deployment
+    replicaCount: 1
+    image:
+      repository: lscr.io/linuxserver/webtop
+      tag: latest
+      pullPolicy: IfNotPresent
   - name: jackett
     enabled: true
     kind: deployment
