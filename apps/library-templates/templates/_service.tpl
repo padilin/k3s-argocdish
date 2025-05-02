@@ -17,6 +17,7 @@ spec:
       targetPort: {{ $portConfig.targetPort }}
       {{- else }}
       targetPort: {{ $portConfig.port }}
+      {{- end }}
   {{- end }}
 ---
 {{- end }}
