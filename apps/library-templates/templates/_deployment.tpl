@@ -24,6 +24,8 @@ spec:
       app.kubernetes.io/name: {{ $.Values.name }}-{{ $appConfig.name }}
       app.kubernetes.io/instance: {{ $.Release.Name }}
       app.kubernetes.io/component: {{ $appConfig.name }}
+  strategy:
+    type: Recreate
   revisionHistoryLimit: 3
   template:
     metadata:
