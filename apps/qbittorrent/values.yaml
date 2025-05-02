@@ -38,6 +38,10 @@ apps:
     env:
         - name: TZ
           value: America/Chicago
+        - name: PUID
+          value: 1000
+        - name: PGID
+          value: 1000
     storage:
       - name: config
         shared: false
