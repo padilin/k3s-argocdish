@@ -1,0 +1,25 @@
+name: overseerr
+apps:
+  - name: overseerr
+    enabled: true
+    kind: deployment
+    replicaCount: 1
+    image:
+      repository: lscr.io/linuxserver/overseerr
+      tag: latest
+      pullPolicy: IfNotPresent
+    env:
+        - name: TZ
+          value: America/Chicago
+        - name: AUTO_UPDATE
+          value: true
+    storage:
+      - name: config
+        shared: false
+        path: /config
+        size: 5Gi
+        pvc: true
+    ports:
+      - name: overseerr-http
+        protocol: TCP
+        port: 5055
