@@ -1,4 +1,4 @@
-{{- define "library-templates._pvc.tpl" -}}
+{{- define "library-templates._pvc-shared.tpl" -}}
 {{- range $appName, $appConfig := .Values.apps }}
 {{- range $volName, $volConfig := $appConfig.storage }}
 {{- if $volConfig.pvc }}
