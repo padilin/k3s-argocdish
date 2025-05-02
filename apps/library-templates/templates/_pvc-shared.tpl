@@ -1,8 +1,8 @@
 {{- define "library-templates._pvc-shared.tpl" -}}
 {{- range $appName, $appConfig := .Values.apps }}
-{{- range $volName, $volConfig := $appConfig.storage }}
-{{- if $volConfig.pvc }}
-{{- if $volConfig.shared }}
+{{- range $volumeName, $volumeConfig := $appConfig.storage }}
+{{- if $volumeConfig.pvc }}
+{{- if $volumeConfig.shared }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -16,7 +16,7 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: {{ $volConfig.size }}
+      storage: {{ $volumeConfig.size }}
   storageClassName: longhorn-arr
   volumeMode: Filesystem
 ---
