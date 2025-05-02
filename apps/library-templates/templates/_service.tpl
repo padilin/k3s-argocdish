@@ -5,7 +5,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-    name: {{ $appName }}-svc
+    name: {{ $appConfig.name }}-svc
 spec:
   selector:
     app.kubernetes.io/name: {{ $.Values.name }}-{{ $appConfig.name }}
