@@ -191,6 +191,17 @@
 #           key: server_countries
 
 applications:
+  - name: jellyfin
+    enabled: true
+    namespace: argocd
+    project: arr
+    source:
+      repoURL: https://github.com/padilin/k3s-argocdish.git
+      path: apps/jellyfin
+      targetRevision: main
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: arr
   - name: sonarr
     enabled: true
     namespace: argocd

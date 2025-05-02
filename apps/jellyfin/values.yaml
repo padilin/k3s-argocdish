@@ -1,0 +1,28 @@
+name: jellyfin
+apps:
+  - name: jellyfin
+    enabled: true
+    kind: deployment
+    replicaCount: 1
+    image:
+      repository: lscr.io/linuxserver/jellyfin
+      tag: latest
+      pullPolicy: IfNotPresent
+    env:
+        - name: TZ
+          value: America/Chicago
+    storage:
+      - name: config
+        shared: false
+        path: /config
+        size: 5Gi
+        pvc: true
+      - name: mediadata
+        shared: true
+        path: /data
+        size: 5Gi
+        pvc: true
+    ports:
+      - name: jellyfin-http
+        protocol: TCP
+        port: 8096
