@@ -12,6 +12,13 @@ apps:
       - name: webtop-http
         protocol: TCP
         port: 3000
+    env:
+      - name: TZ
+        value: America/Chicago
+      - name: PUID
+        value: 1000
+      - name: PGID
+        value: 1000
   - name: jackett
     enabled: true
     kind: deployment
