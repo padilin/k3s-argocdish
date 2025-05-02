@@ -35,6 +35,27 @@ spec:
         app.kubernetes.io/component: {{ $appConfig.name }}
     spec:
       containers:
+      {{- if $appConfig.gluetun }}
+        - name: {{ $appConfig.name }}-gluetun
+          image: qmcgaw/gluetun
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+            runAsUser: 0
+          volumeMounts:
+            - name: arr-{{ $appConfig.name }}-gluetun
+              mountPath: /gluetun
+          env:
+            {{- range $envVar := $appConfig.gluetun.env }}
+            - name: {{ $envVar.name }}
+              {{- if $envVar.value }}
+              value: {{ $envVar.value | quote }}
+              {{- else if $envVar.valueFrom }}
+              valueFrom:
+                {{- toYaml $envVar.valueFrom | nindent 16 }}
+              {{- end }}
+            {{- end }}
+        {{- end }}
         - name: {{ $appConfig.name }} # Container name based on the app key
           image: "{{ $appConfig.image.repository }}:{{ $appConfig.image.tag }}"
           imagePullPolicy: {{ $appConfig.image.pullPolicy }}
@@ -86,6 +107,10 @@ spec:
                     - nvme
         {{- end }}
       volumes:
+        {{- if $appConfig.gluetun }}
+        - name: arr-{{ $appConfig.name }}-gluetun
+          emptyDir:
+        {{- end }}
         {{- range $volumeConfig := $appConfig.storage }}
         {{- if $volumeConfig.pvc }}
           {{- if $volumeConfig.shared }}

@@ -1,0 +1,10 @@
+apiVersion: v2
+name: radarr
+description: A Helm chart for radarr application-ish based on Linuxserver.io
+type: application
+dependencies:
+  - name: library-templates
+    version: 0.1.0
+    repository: file://../library-templates
+
+version: 0.1.0
