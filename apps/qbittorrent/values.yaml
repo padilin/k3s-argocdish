@@ -39,12 +39,12 @@ apps:
         - name: TZ
           value: America/Chicago
     storage:
-      config:
+      - name: config
         shared: false
         path: /config
         size: 5Gi
         pvc: true
-      media-data:
+      - name: mediadata
         shared: true
         path: /data
         size: 5Gi
