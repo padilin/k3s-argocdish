@@ -36,6 +36,10 @@ spec:
         - name: {{ $appConfig.name }} # Container name based on the app key
           image: "{{ $appConfig.image.repository }}:{{ $appConfig.image.tag }}"
           imagePullPolicy: {{ $appConfig.image.pullPolicy }}
+          {{- if $appConfig.root }}
+          securityContext:
+            runAsUser: 0
+          {{- end }}
           {{- if $appConfig.resources }}
           resources:
             {{- toYaml $appConfig.resources | nindent 12 }}
