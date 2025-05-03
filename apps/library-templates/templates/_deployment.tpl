@@ -38,7 +38,6 @@ spec:
       {{- if $appConfig.gluetun }}
         - name: {{ $appConfig.name }}-gluetun
           image: qmcgaw/gluetun
-          restartPolicy: Always
           imagePullPolicy: Always
           ports:
             - name: http-proxy
