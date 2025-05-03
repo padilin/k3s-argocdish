@@ -50,6 +50,7 @@ spec:
               containerPort: 8388
               protocol: UDP
           securityContext:
+            runAsUser: 0
             capabilities:
               add: ["NET_ADMIN"]
           volumeMounts:
