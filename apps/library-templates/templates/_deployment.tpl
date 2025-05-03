@@ -42,10 +42,6 @@ spec:
             capabilities:
               add: ["NET_ADMIN"]
             runAsUser: 0
-          lifecycle:
-            postStart:
-              exec:
-                command: ["/bin/sh", "-c", "(ip rule del table 51820; ip -6 rule del table 51820) || true"]
           volumeMounts:
             - name: arr-{{ $appConfig.name }}-gluetun
               mountPath: /gluetun
