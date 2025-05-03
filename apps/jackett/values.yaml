@@ -1,7 +1,7 @@
 name: jackett
 apps:
   - name: webtop
-    enabled: true
+    enabled: false
     kind: deployment
     replicaCount: 1
     root: true
