@@ -58,6 +58,8 @@ apps:
               key: server_countries
         - name: FIREWALL_INPUT_PORTS
           value: 9117
+        - name: DNS_KEEP_NAMESERVER
+          value: on
     env:
         - name: TZ
           value: America/Chicago
