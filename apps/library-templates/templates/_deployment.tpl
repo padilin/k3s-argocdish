@@ -34,8 +34,8 @@ spec:
         app.kubernetes.io/instance: {{ $.Release.Name }}
         app.kubernetes.io/component: {{ $appConfig.name }}
     spec:
-      containers:
       {{- if $appConfig.gluetun }}
+      initContainers:
         - name: {{ $appConfig.name }}-gluetun
           image: qmcgaw/gluetun
           securityContext:
@@ -60,6 +60,8 @@ spec:
               {{- end }}
             {{- end }}
         {{- end }}
+      
+      containers:
         - name: {{ $appConfig.name }} # Container name based on the app key
           image: "{{ $appConfig.image.repository }}:{{ $appConfig.image.tag }}"
           imagePullPolicy: {{ $appConfig.image.pullPolicy }}
