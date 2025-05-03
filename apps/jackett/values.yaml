@@ -58,6 +58,8 @@ apps:
               key: server_countries
         - name: DOT_PROVIDERS
           value: google
+        - name: FIREWALL_DEBUG
+          value: on
     env:
         - name: TZ
           value: America/Chicago
