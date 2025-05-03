@@ -34,14 +34,25 @@ spec:
         app.kubernetes.io/instance: {{ $.Release.Name }}
         app.kubernetes.io/component: {{ $appConfig.name }}
     spec:
+      containers:
       {{- if $appConfig.gluetun }}
-      initContainers:
         - name: {{ $appConfig.name }}-gluetun
           image: qmcgaw/gluetun
+          restartPolicy: Always
+          imagePullPolicy: Always
+          ports:
+            - name: http-proxy
+              containerPort: 8888
+              protocol: TCP
+            - name: tcp-shadowsocks
+              containerPort: 8388
+              protocol: TCP
+            - name: udp-shadowsocks
+              containerPort: 8388
+              protocol: UDP
           securityContext:
             capabilities:
               add: ["NET_ADMIN"]
-            runAsUser: 0
           volumeMounts:
             - name: arr-{{ $appConfig.name }}-gluetun
               mountPath: /gluetun
@@ -56,8 +67,6 @@ spec:
               {{- end }}
             {{- end }}
         {{- end }}
-      
-      containers:
         - name: {{ $appConfig.name }} # Container name based on the app key
           image: "{{ $appConfig.image.repository }}:{{ $appConfig.image.tag }}"
           imagePullPolicy: {{ $appConfig.image.pullPolicy }}
