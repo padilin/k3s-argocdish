@@ -52,7 +52,7 @@ spec:
           securityContext:
             runAsUser: 0
             capabilities:
-              add: ["NET_ADMIN"]
+              add: ["NET_ADMIN", "NET_RAW"]
           volumeMounts:
             - name: arr-{{ $appConfig.name }}-gluetun
               mountPath: /gluetun
