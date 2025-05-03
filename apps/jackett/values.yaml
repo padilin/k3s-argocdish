@@ -24,6 +24,7 @@ apps:
     enabled: true
     kind: deployment
     replicaCount: 1
+    root: true
     image:
       repository: lscr.io/linuxserver/jackett
       tag: latest
