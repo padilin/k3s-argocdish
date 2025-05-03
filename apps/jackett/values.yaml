@@ -56,7 +56,7 @@ apps:
               name: arr-gluetun-secret
               key: server_countries
         - name: DOT_PROVIDERS
-          value: quadrant
+          value: google
     env:
         - name: TZ
           value: America/Chicago
