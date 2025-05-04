@@ -13,16 +13,16 @@ spec:
   parentRefs:
     - name: {{ $appConfig.name }}-gateway
       namespace: {{ $.Release.Namespace }}
-    hostnames:
-      - "{{ $portConfig.name }}.local.gatheringhub.lan"
-    rules:
-      - mathes:
+  hostnames:
+    - "{{ $portConfig.name }}.local.gatheringhub.lan"
+  rules:
+    - matches:
         - path:
             type: Prefix
             value: "/"
-        backendRefs:
-          - name: {{ $appConfig.name }}-svc
-            port: {{ $portConfig.port }}
+      backendRefs:
+        - name: {{ $appConfig.name }}-svc
+          port: {{ $portConfig.port }}
 ---
 {{- end }}
 {{- end }}
