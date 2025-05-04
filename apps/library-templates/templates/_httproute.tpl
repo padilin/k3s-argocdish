@@ -18,7 +18,7 @@ spec:
   rules:
     - matches:
         - path:
-            type: Prefix
+            type: PathPrefix
             value: "/"
       backendRefs:
         - name: {{ $appConfig.name }}-svc
