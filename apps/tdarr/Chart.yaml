@@ -1,0 +1,10 @@
+apiVersion: v2
+name: tdarr
+description: A Helm chart for tdarr distributed transcode
+type: application
+dependencies:
+  - name: library-templates
+    version: 0.1.0
+    repository: file://../library-templates
+
+version: 0.1.0

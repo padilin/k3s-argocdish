@@ -6,5 +6,5 @@ apps:
       - name: mediadata
         shared: true
         path: /data
-        size: 50Gi
+        size: 100Gi
         pvc: true
