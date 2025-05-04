@@ -1,0 +1,42 @@
+name: plex
+apps:
+  - name: plex
+    enabled: true
+    kind: deployment
+    replicaCount: 1
+    root: true
+    image:
+      repository: lscr.io/linuxserver/plex
+      tag: latest
+      pullPolicy: IfNotPresent
+    env:
+        - name: TZ
+          value: America/Chicago
+        - name: VERSION
+          value: public
+        - name: PLEX_CLAIM
+          valueFrome:
+            secretKeyRef:
+              name: plex-claim-secret
+              key: claim
+    storage:
+      - name: config
+        shared: false
+        path: /config
+        size: 5Gi
+        pvc: true
+      - name: mediadata
+        shared: true
+        path: /data
+        subPath: ./media
+        size: 5Gi
+        pvc: true
+      - name: decoder
+        shared: false
+        path: /dev/video19
+        hostPath: /dev/video19
+        pvc: false
+    ports:
+      - name: plex-http
+        protocol: TCP
+        port: 32400
