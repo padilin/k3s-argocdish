@@ -14,8 +14,12 @@ apps:
           value: America/Chicago
         - name: VERSION
           value: public
+        - name: PUID
+          value: 1000
+        - name: PGID
+          value: 1000
         - name: PLEX_CLAIM
-          valueFrome:
+          valueFrom:
             secretKeyRef:
               name: plex-claim-secret
               key: claim
