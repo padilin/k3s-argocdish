@@ -1,6 +1,7 @@
 name: jellyseerr
 apps:
   - name: jellyseerr
+    root: true
     enabled: true
     kind: deployment
     replicaCount: 1
