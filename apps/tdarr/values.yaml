@@ -60,7 +60,7 @@ apps:
   - name: tdarr-node
     enabled: true
     kind: deployment
-    replicaCount: 1
+    replicaCount: 3
     image:
       repository: ghcr.io/haveagitgat/tdarr_node
       tag: latest
