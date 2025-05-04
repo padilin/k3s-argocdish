@@ -30,6 +30,7 @@ apps:
       tag: latest
       pullPolicy: Always
     gluetun:
+      tag: v3.40.0
       env:
         - name: TZ
           value: America/Chicago
