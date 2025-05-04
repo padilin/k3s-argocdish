@@ -192,7 +192,7 @@
 
 applications:
   - name: jellyfin
-    enabled: true
+    enabled: false
     namespace: argocd
     project: arr
     source:
@@ -236,12 +236,23 @@ applications:
       server: https://kubernetes.default.svc
       namespace: arr
   - name: jellyseerr
-    enabled: true
+    enabled: false
     namespace: argocd
     project: arr
     source:
       repoURL: https://github.com/padilin/k3s-argocdish.git
       path: apps/jellyseerr
+      targetRevision: main
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: arr
+  - name: overseerr
+    enabled: false
+    namespace: argocd
+    project: arr
+    source:
+      repoURL: https://github.com/padilin/k3s-argocdish.git
+      path: apps/overseerr
       targetRevision: main
     destination:
       server: https://kubernetes.default.svc

@@ -1,0 +1,10 @@
+apiVersion: v2
+name: overseerr
+description: A Helm chart for overseerr application-ish
+type: application
+dependencies:
+  - name: library-templates
+    version: 0.1.0
+    repository: file://../library-templates
+
+version: 0.1.0

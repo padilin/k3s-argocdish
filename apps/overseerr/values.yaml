@@ -1,0 +1,28 @@
+name: overseerr
+apps:
+  - name: overseerr
+    root: true
+    enabled: true
+    kind: deployment
+    replicaCount: 1
+    image:
+      repository: lscr.io/linuxserver/overseerr
+      tag: latest
+      pullPolicy: Always
+    env:
+        - name: TZ
+          value: America/Chicago
+        - name: PUID
+          value: 1000
+        - name: PGID
+          value: 1000
+    storage:
+      - name: config
+        shared: false
+        path: /config
+        size: 5Gi
+        pvc: true
+    ports:
+      - name: overseerr-http
+        protocol: TCP
+        port: 5055
