@@ -247,7 +247,7 @@ applications:
       server: https://kubernetes.default.svc
       namespace: arr
   - name: overseerr
-    enabled: false
+    enabled: true
     namespace: argocd
     project: arr
     source:
