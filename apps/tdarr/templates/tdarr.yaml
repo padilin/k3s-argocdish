@@ -71,7 +71,7 @@ spec:
   - metadata:
       name: config
     spec:
-      accessModes: [ "ReadWriteOnce" ]
+      accessModes: [ "ReadWriteOncePod" ]
       storageClassName: longhorn-arr
       resources:
         requests:
@@ -79,7 +79,7 @@ spec:
   - metadata:
       name: server
     spec:
-      accessModes: [ "ReadWriteOnce" ]
+      accessModes: [ "ReadWriteOncePod" ]
       storageClassName: longhorn-arr
       resources:
         requests:
