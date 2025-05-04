@@ -1,6 +1,6 @@
 apiVersion: v2
-name: tautilli
-description: A Helm chart for tautilli application-ish based on Linuxserver.io
+name: tautulli
+description: A Helm chart for tautulli application-ish based on Linuxserver.io
 type: application
 dependencies:
   - name: library-templates

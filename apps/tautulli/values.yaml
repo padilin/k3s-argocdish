@@ -1,11 +1,11 @@
-name: tautilli
+name: tautulli
 apps:
   - name: tautulli
     enabled: true
     kind: deployment
     replicaCount: 1
     image:
-      repository: lscr.io/linuxserver/tautilli
+      repository: lscr.io/linuxserver/tautulli
       tag: latest
       pullPolicy: Always
     env:
@@ -22,6 +22,6 @@ apps:
         size: 5Gi
         pvc: true
     ports:
-      - name: tautilli-http
+      - name: tautulli-http
         protocol: TCP
         port: 8181

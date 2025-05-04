@@ -268,13 +268,13 @@ applications:
     destination:
       server: https://kubernetes.default.svc
       namespace: arr
-  - name: tautilli
+  - name: tautulli
     enabled: true
     namespace: argocd
     project: arr
     source:
       repoURL: https://github.com/padilin/k3s-argocdish.git
-      path: apps/tautilli
+      path: apps/tautulli
       targetRevision: main
     destination:
       server: https://kubernetes.default.svc
