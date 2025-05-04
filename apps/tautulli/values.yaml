@@ -1,0 +1,27 @@
+name: tautilli
+apps:
+  - name: tautulli
+    enabled: true
+    kind: deployment
+    replicaCount: 1
+    image:
+      repository: lscr.io/linuxserver/tautilli
+      tag: latest
+      pullPolicy: Always
+    env:
+        - name: TZ
+          value: America/Chicago
+        - name: PUID
+          value: 1000
+        - name: PGID
+          value: 1000
+    storage:
+      - name: config
+        shared: false
+        path: /config
+        size: 5Gi
+        pvc: true
+    ports:
+      - name: tautilli-http
+        protocol: TCP
+        port: 8181
