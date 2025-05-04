@@ -8,7 +8,7 @@ spec:
     matchLabels:
       app: tdarr
   serviceName: tdarr
-  replicas: 4
+  replicas: 1
   template:
     metadata:
       labels:
@@ -48,6 +48,95 @@ spec:
                name: ui
              - containerPort: 8266
                name: server
+           volumeMounts:        
+             - mountPath: /app/configs
+               name: config
+             - mountPath: /app/server
+               name: server               
+             - mountPath: /app/logs
+               name: logs
+             - mountPath: /movies
+               name: arr-shared-mediadata
+               subPath: ./media/movies
+             - mountPath: /tv
+               name: arr-shared-mediadata
+               subPath: ./media/tv
+      volumes:          
+        - name: logs
+          emptyDir: {}
+        - name: arr-shared-mediadata
+          persistentVolumeClaim:
+            claimName: arr-shared-mediadata-pvc
+  volumeClaimTemplates:
+  - metadata:
+      name: config
+    spec:
+      accessModes: [ "ReadWriteMany" ]
+      storageClassName: longhorn
+      resources:
+        requests:
+          storage: 1Gi
+  - metadata:
+      name: server
+    spec:
+      accessModes: [ "ReadWriteMany" ]
+      storageClassName: longhorn
+      resources:
+        requests:
+          storage: 10Gi          
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tdarr-node
+  namespace: arr
+spec:
+  selector:
+    matchLabels:
+      app: tdarr-node
+  serviceName: tdarr-node
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: tdarr-node
+    spec:
+      securityContext:
+        runAsUser: 0
+        fsGroup: 1000
+    #   initContainers:
+    #   - name: volume-permissions
+    #     image: busybox:1.31.1
+    #     command: ["sh", "-c", "chown -R 1000:1000 /app/configs && chown -R 1000:1000 /tv && chown -R 1000:1000 /movies"]
+    #     volumeMounts: 
+    #       - mountPath: /app/configs
+    #         name: config
+    #       - mountPath: /movies
+    #         name: arr-shared-mediadata
+    #         subPath: ./media/movies
+    #       - mountPath: /tv
+    #         name: arr-shared-mediadata-pvc
+    #         subPath: ./media/tv
+      containers:
+         - name: tdarr-node
+           image: haveagitgat/tdarr:latest
+           imagePullPolicy: Always
+           env:
+             - name: PUID
+               value: "1000"
+             - name: PGID
+               value: "1000"
+             - name: TZ
+               value: "America/Chicago"
+             - name: inContainer
+               value: "true"
+             - name: internalNode
+               value: "false"
+             - name: nodeName
+               value: "podNode"
+           ports:
+             - containerPort: 8265
+               name: ui
            volumeMounts:        
              - mountPath: /app/configs
                name: config
