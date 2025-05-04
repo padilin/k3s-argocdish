@@ -1,6 +1,6 @@
 apiVersion: v2
-name: radarr
-description: A Helm chart for radarr application-ish based on Linuxserver.io
+name: overseerr
+description: A Helm chart for overseerr application-ish based on Linuxserver.io
 type: application
 dependencies:
   - name: library-templates
