@@ -1,6 +1,6 @@
 apiVersion: v2
-name: overseerr
-description: A Helm chart for overseerr application-ish based on Linuxserver.io
+name: jellyseerr
+description: A Helm chart for jellyseerr application-ish
 type: application
 dependencies:
   - name: library-templates

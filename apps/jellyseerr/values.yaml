@@ -1,11 +1,11 @@
-name: overseerr
+name: jellyseerr
 apps:
-  - name: overseerr
+  - name: jellyseerr
     enabled: true
     kind: deployment
     replicaCount: 1
     image:
-      repository: lscr.io/linuxserver/overseerr
+      repository: fallenbagel/jellyseerr
       tag: latest
       pullPolicy: IfNotPresent
     env:
@@ -20,6 +20,6 @@ apps:
         size: 5Gi
         pvc: true
     ports:
-      - name: overseerr-http
+      - name: jellyseerr-http
         protocol: TCP
         port: 5055

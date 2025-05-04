@@ -235,13 +235,13 @@ applications:
     destination:
       server: https://kubernetes.default.svc
       namespace: arr
-  - name: overseerr
+  - name: jellyseerr
     enabled: true
     namespace: argocd
     project: arr
     source:
       repoURL: https://github.com/padilin/k3s-argocdish.git
-      path: apps/overseerr
+      path: apps/jellyseerr
       targetRevision: main
     destination:
       server: https://kubernetes.default.svc
