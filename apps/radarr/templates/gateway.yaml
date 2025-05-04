@@ -1,0 +1,1 @@
+{{- include "library-templates._gateway.tpl" . | nindent 0 -}}

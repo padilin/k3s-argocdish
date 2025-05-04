@@ -26,4 +26,4 @@ apps:
       - name: radarr-http
         protocol: TCP
         port: 7878
-        targetPort: 7878
+        scheme: HTTP

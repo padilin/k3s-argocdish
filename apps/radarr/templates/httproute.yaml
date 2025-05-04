@@ -1,0 +1,1 @@
+{{- include "library-templates._httproute.tpl" . | nindent 0 -}}
