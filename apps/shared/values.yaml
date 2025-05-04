@@ -8,3 +8,18 @@ apps:
         path: /data
         size: 100Gi
         pvc: true
+      - name: tdarrconfigs
+        shared: true
+        path: /data
+        size: 5Gi
+        pvc: true
+      - name: tdarrlogs
+        shared: true
+        path: /app/logs
+        size: 5Gi
+        pvc: true
+      - name: transcodecache
+        shared: true
+        path: /temp
+        size: 10Gi
+        pvc: true
