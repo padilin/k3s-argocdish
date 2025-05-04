@@ -15,9 +15,9 @@ spec:
       - name: {{ $portConfig.name }}
         protocol: {{ $portConfig.scheme }}
         {{- if $portConfig.targetPort }}
-        targetPort: {{ $portConfig.targetPort }}
+        Port: {{ $portConfig.targetPort }}
         {{- else }}
-        targetPort: {{ $portConfig.port }}
+        Port: {{ $portConfig.port }}
         {{- end }}
     {{- end }}
     {{- end }}
