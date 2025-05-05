@@ -2,6 +2,7 @@ name: tdarr
 apps:
   - name: tdarr-server
     enabled: true
+    root: true
     kind: deployment
     replicaCount: 1
     image:
@@ -50,6 +51,11 @@ apps:
         shared: true
         path: /temp
         pvc: true
+      - name: decoder
+        shared: false
+        path: /dev/video19
+        hostPath: /dev/video19
+        pvc: false
     ports:
       - name: tdarr-webui-http
         protocol: TCP
@@ -58,6 +64,7 @@ apps:
         protocol: TCP
         port: 8266
   - name: tdarr-node
+    root: true
     enabled: true
     kind: deployment
     replicaCount: 3
@@ -98,3 +105,8 @@ apps:
         shared: true
         path: /temp
         pvc: true
+      - name: decoder
+        shared: false
+        path: /dev/video19
+        hostPath: /dev/video19
+        pvc: false
